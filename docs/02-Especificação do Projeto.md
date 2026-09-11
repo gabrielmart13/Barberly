@@ -50,8 +50,13 @@ As tabelas que se seguem apresentam os requisitos funcionais e não funcionais q
 
 |ID     | Descrição do Requisito  |Prioridade |
 |-------|-------------------------|----|
-|RNF-001| A aplicação deve ser responsiva | MÉDIA | 
-|RNF-002| A aplicação deve processar requisições do usuário em no máximo 3s |  BAIXA | 
+| RNF-001 | A aplicação deve possuir uma interface intuitiva, simples e de fácil utilização, permitindo que os usuários realizem suas principais tarefas sem necessidade de conhecimentos técnicos. |
+| RNF-002 | A aplicação deve carregar suas telas e funcionalidades principais em até 5 segundos em condições normais de uso. |
+| RNF-003 | A aplicação deve garantir a integridade dos dados dos usuários e impedir acessos ou alterações não autorizadas às informações. |
+| RNF-004 | A aplicação deve possuir uma interface responsiva, adaptando-se adequadamente a diferentes tamanhos de tela e dispositivos. |
+| RNF-005 | A aplicação deve apresentar mensagens claras ao usuário em situações de erro, confirmação ou conclusão de operações. |
+| RNF-006 | A aplicação deve manter um padrão visual consistente entre suas telas, incluindo elementos como botões, formulários, menus e navegação. |
+| RNF-007 | A aplicação deve validar os dados informados pelos usuários antes de realizar operações como cadastro, login e agendamento. |
 
 ## Diagrama de Casos de Uso
 
