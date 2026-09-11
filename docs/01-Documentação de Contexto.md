@@ -1,43 +1,54 @@
 # Introdução
 
-Texto descritivo com a visão geral do projeto abordado. Inclui o contexto, o problema, os objetivos, a justificativa e o público-alvo do projeto.
+O Barberly é um projeto de software voltado à facilitação do agendamento de serviços em barbearias. A proposta surge a partir da dificuldade encontrada por muitos clientes para marcar cortes e outros serviços de forma prática, considerando que diversas barbearias ainda utilizam métodos pouco eficientes, como o atendimento por ordem de chegada ou agendamentos realizados exclusivamente por meio do WhatsApp.
+
+Nesse contexto, o projeto busca desenvolver uma solução simples, intuitiva e versátil, capaz de atender às necessidades tanto dos clientes quanto das barbearias. A intenção é proporcionar maior organização no processo de agendamento, melhorar a experiência do cliente e oferecer às barbearias uma ferramenta que possa ser facilmente incorporada à sua rotina.
+
+O Barberly tem como objetivo, portanto, utilizar a tecnologia para modernizar uma etapa importante do atendimento em barbearias, reduzindo dificuldades no agendamento e contribuindo para uma experiência de serviço mais organizada e eficiente.
 
 ## Problema
-Nesse momento você deve apresentar o problema que a sua aplicação deve  resolver. No entanto, não é a hora de comentar sobre a aplicação.
 
-Descreva também o contexto em que essa aplicação será usada, se  houver: empresa, tecnologias, etc. Novamente, descreva apenas o que de  fato existir, pois ainda não é a hora de apresentar requisitos  detalhados ou projetos.
+O processo de agendamento de serviços ainda apresenta dificuldades em muitas barbearias. Em diversos estabelecimentos, o atendimento ocorre por ordem de chegada, fazendo com que o cliente precise se deslocar até o local sem ter garantia de horário. Em outros casos, os agendamentos são realizados principalmente pelo WhatsApp, o que pode gerar conversas desorganizadas, demora nas respostas, dificuldade para visualizar horários disponíveis e conflitos de agenda.
 
-Nesse momento, o grupo pode optar por fazer uso  de ferramentas como Design Thinking, que permite um olhar de ponta a ponta para o problema.
+Essa situação prejudica tanto os clientes quanto os estabelecimentos. Para o cliente, existe a dificuldade de encontrar um horário adequado e obter informações claras sobre sua reserva. Para a barbearia, o gerenciamento manual dos horários pode aumentar a possibilidade de erros, conflitos de agenda e perda de tempo no atendimento.
 
-> **Links Úteis**:
-> - [Objetivos, Problema de pesquisa e Justificativa](https://medium.com/@versioparole/objetivos-problema-de-pesquisa-e-justificativa-c98c8233b9c3)
-> - [Matriz Certezas, Suposições e Dúvidas](https://medium.com/educa%C3%A7%C3%A3o-fora-da-caixa/matriz-certezas-suposi%C3%A7%C3%B5es-e-d%C3%BAvidas-fa2263633655)
-> - [Brainstorming](https://www.euax.com.br/2018/09/brainstorming/)
+Embora já existam soluções digitais de agendamento, uma parcela das barbearias ainda não dispõe de um sistema adequado às suas necessidades. Isso evidencia a necessidade de uma alternativa simples e versátil, que possa ser utilizada por diferentes estabelecimentos sem exigir processos complexos de operação.
 
 ## Objetivos
 
-Aqui você deve descrever os objetivos do trabalho indicando que o objetivo geral é desenvolver um software para solucionar o problema apresentado acima. 
+Objetivo Geral
 
-Apresente também alguns (pelo menos 2) objetivos específicos dependendo de onde você vai querer concentrar a sua prática investigativa, ou como você vai aprofundar no seu trabalho.
- 
-> **Links Úteis**:
-> - [Objetivo geral e objetivo específico: como fazer e quais verbos utilizar](https://blog.mettzer.com/diferenca-entre-objetivo-geral-e-objetivo-especifico/)
+Desenvolver o Barberly, um software de agendamento de serviços para barbearias, com o objetivo de simplificar e organizar o processo de marcação de horários, proporcionando maior praticidade aos clientes e melhor gerenciamento da agenda para os estabelecimentos.
+
+Objetivos Específicos
+Facilitar a consulta e o agendamento de horários disponíveis.
+Organizar a gestão dos agendamentos e da disponibilidade dos serviços.
+Reduzir a dependência de métodos manuais de agendamento, como conversas individuais por WhatsApp.
+Proporcionar uma experiência simples e intuitiva para os clientes.
+Oferecer uma solução versátil que possa ser utilizada por diferentes barbearias.
+Contribuir para a melhoria da organização e da qualidade do atendimento prestado pelos estabelecimentos.
 
 ## Justificativa
 
-Explique de forma clara a relevância da aplicação escolhida, justificando os objetivos específicos e os aspectos do software que serão aprofundados, e quantifique o impacto do problema com dados concretos (números, percentuais, indicadores) obtidos por bases oficiais ou outras fontes confiáveis, sempre citadas no padrão ABNT (no formato [Numérico] ou (AUTOR, ANO)).
+A escolha do problema está relacionada à necessidade de modernização do processo de agendamento em barbearias. A utilização de canais informais, como mensagens pelo WhatsApp, embora seja acessível, não foi desenvolvida especificamente para o gerenciamento de agendas e pode dificultar a organização de horários, a visualização da disponibilidade e o controle dos atendimentos.
 
-**Relacione o problema aos Objetivos de Desenvolvimento Sustentável (ODS), indicando quais ODS e subobjetivos são atendidos e descrevendo como o projeto contribui para cada um deles, garantindo coerência entre o impacto mensurado e as metas selecionadas.**
+Nesse cenário, o desenvolvimento de uma solução específica para o setor pode contribuir para tornar o processo mais organizado e previsível. Para o cliente, um sistema de agendamento permite maior autonomia na escolha do serviço e do horário. Para a barbearia, centraliza as informações e facilita o gerenciamento da agenda.
 
-> **Links Úteis**:
-> - [Como montar a justificativa](https://guiadamonografia.com.br/como-montar-justificativa-do-tcc/)
+A relevância do Barberly está, portanto, na aplicação da tecnologia para solucionar um problema cotidiano e recorrente, buscando oferecer uma ferramenta acessível, simples de utilizar e adaptável a diferentes estabelecimentos.
+
+Além disso, o projeto está relacionado aos Objetivos de Desenvolvimento Sustentável (ODS), especialmente:
+
+ODS 8 – Trabalho Decente e Crescimento Econômico: ao contribuir para a melhoria da organização e eficiência das atividades realizadas pelos estabelecimentos.
+ODS 9 – Indústria, Inovação e Infraestrutura: ao utilizar uma solução tecnológica para modernizar um processo tradicional de prestação de serviços.
+
+Observação: a versão final desta seção deve incorporar dados quantitativos e fontes confiáveis sobre o uso de sistemas de agendamento, digitalização de pequenos negócios ou utilização do WhatsApp por empresas, conforme exigido pela documentação acadêmica. Esses dados não foram fornecidos no texto original, portanto não os inventei.
 
 ## Público-Alvo
 
-Descreva quem serão as pessoas que usarão a sua aplicação indicando os diferentes perfis. O objetivo aqui não é definir quem serão os clientes ou quais serão os papéis dos usuários na aplicação. A ideia é, dentro do possível, conhecer um pouco mais sobre o perfil dos usuários: conhecimentos prévios, relação com a tecnologia, relações hierárquicas, etc.
+O Barberly é destinado principalmente a clientes de barbearias e profissionais/estabelecimentos que oferecem serviços de corte e cuidados pessoais.
 
-> **Links Úteis**:
-> - [Público-alvo](https://blog.hotmart.com/pt-br/publico-alvo/)
-> - [Como definir o público alvo](https://exame.com/pme/5-dicas-essenciais-para-definir-o-publico-alvo-do-seu-negocio/)
-> - [Público-alvo: o que é, tipos, como definir seu público e exemplos](https://klickpages.com.br/blog/publico-alvo-o-que-e/)
-> - [Qual a diferença entre público-alvo e persona?](https://rockcontent.com/blog/diferenca-publico-alvo-e-persona/)
+Do lado dos clientes, a solução é voltada principalmente para pessoas que utilizam smartphones e possuem familiaridade básica com aplicativos e serviços digitais. O objetivo é que o usuário consiga realizar um agendamento sem necessidade de conhecimentos técnicos, por meio de uma interface clara e intuitiva.
+
+Do lado dos estabelecimentos, o público-alvo compreende barbearias de diferentes portes, especialmente aquelas que atualmente utilizam atendimento por ordem de chegada ou realizam seus agendamentos de maneira manual, principalmente por aplicativos de mensagens.
+
+A solução deve considerar diferentes níveis de familiaridade tecnológica, permitindo que tanto clientes quanto profissionais consigam utilizar suas funcionalidades de maneira simples, independentemente de conhecimentos avançados em tecnologia.vo e persona?](https://rockcontent.com/blog/diferenca-publico-alvo-e-persona/)
