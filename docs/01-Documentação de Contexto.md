@@ -51,4 +51,4 @@ Do lado dos clientes, a solução é voltada principalmente para pessoas que uti
 
 Do lado dos estabelecimentos, o público-alvo compreende barbearias de diferentes portes, especialmente aquelas que atualmente utilizam atendimento por ordem de chegada ou realizam seus agendamentos de maneira manual, principalmente por aplicativos de mensagens.
 
-A solução deve considerar diferentes níveis de familiaridade tecnológica, permitindo que tanto clientes quanto profissionais consigam utilizar suas funcionalidades de maneira simples, independentemente de conhecimentos avançados em tecnologia.vo e persona?](https://rockcontent.com/blog/diferenca-publico-alvo-e-persona/)
+A solução deve considerar diferentes níveis de familiaridade tecnológica, permitindo que tanto clientes quanto profissionais consigam utilizar suas funcionalidades de maneira simples, independentemente de conhecimentos avançados em tecnologia.
