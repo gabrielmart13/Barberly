@@ -1,77 +1,55 @@
-
 # Metodologia
 
-<span style="color:red">Pré-requisitos: <a href="2-Especificação do Projeto.md"> Documentação de Especificação</a></span>
+A metodologia adotada no desenvolvimento do Barberly foi estruturada para organizar as etapas do projeto, acompanhar seu progresso e manter o controle sobre as alterações realizadas. Como o projeto é desenvolvido individualmente, todas as atividades de análise, desenvolvimento, testes e documentação são realizadas pelo próprio desenvolvedor.
 
-Descreva aqui a metodologia de trabalho do grupo para atacar o problema. Definições sobre os ambiente de trabalho utilizados pela  equipe para desenvolver o projeto. Abrange a relação de ambientes utilizados, a estrutura para gestão do código fonte, além da definição do processo e ferramenta através dos quais a equipe se organiza (Gestão de Times).
+O projeto utiliza uma abordagem de desenvolvimento incremental, na qual as funcionalidades são implementadas, testadas e aprimoradas ao longo do desenvolvimento.
 
 ## Controle de Versão
 
-A ferramenta de controle de versão adotada no projeto foi o
-[Git](https://git-scm.com/), sendo que o [Github](https://github.com)
-foi utilizado para hospedagem do repositório.
+O **Git** é utilizado para o controle de versão do código-fonte, enquanto o **GitHub** é utilizado para hospedagem do repositório e gerenciamento das atividades do projeto.
 
-O projeto segue a seguinte convenção para o nome de branches:
+São utilizadas as seguintes branches:
 
-- `main`: versão estável já testada do software
-- `unstable`: versão já testada do software, porém instável
-- `testing`: versão em testes do software
-- `dev`: versão de desenvolvimento do software
+* `main`: versão estável do projeto;
+* `unstable`: versão testada, mas que ainda pode apresentar instabilidades;
+* `testing`: utilizada para testes e validação das funcionalidades;
+* `dev`: utilizada para o desenvolvimento.
 
-Quanto à gerência de issues, o projeto adota a seguinte convenção para
-etiquetas:
+As novas funcionalidades são desenvolvidas principalmente na branch `dev` e, após os testes, podem ser integradas às demais branches por meio de *merge*. Os commits são realizados durante o desenvolvimento para registrar as alterações e manter o histórico do projeto organizado.
 
-- `documentation`: melhorias ou acréscimos à documentação
-- `bug`: uma funcionalidade encontra-se com problemas
-- `enhancement`: uma funcionalidade precisa ser melhorada
-- `feature`: uma nova funcionalidade precisa ser introduzida
+O GitHub também é utilizado para gerenciamento de **Issues**, que registram novas funcionalidades, problemas e melhorias. Para facilitar sua organização, são utilizadas as etiquetas:
 
-Discuta como a configuração do projeto foi feita na ferramenta de versionamento escolhida. Exponha como a gerência de tags, merges, commits e branchs é realizada. Discuta como a gerência de issues foi realizada.
-
-> **Links Úteis**:
-> - [Tutorial GitHub](https://guides.github.com/activities/hello-world/)
-> - [Git e Github](https://www.youtube.com/playlist?list=PLHz_AreHm4dm7ZULPAmadvNhH6vk9oNZA)
->  - [Comparando fluxos de trabalho](https://www.atlassian.com/br/git/tutorials/comparing-workflows)
-> - [Understanding the GitHub flow](https://guides.github.com/introduction/flow/)
-> - [The gitflow workflow - in less than 5 mins](https://www.youtube.com/watch?v=1SXpE08hvGs)
+* `documentation`: alterações na documentação;
+* `bug`: problemas encontrados;
+* `enhancement`: melhorias em funcionalidades existentes;
+* `feature`: novas funcionalidades.
 
 ## Gerenciamento de Projeto
 
-### Divisão de Papéis
+Por ser um projeto individual, não existe divisão de funções entre integrantes. O próprio desenvolvedor é responsável pelo planejamento, programação, testes, documentação e manutenção do sistema.
 
-Apresente a divisão de papéis entre os membros do grupo.
-
-> **Links Úteis**:
-> - [11 Passos Essenciais para Implantar Scrum no seu 
-> Projeto](https://mindmaster.com.br/scrum-11-passos/)
-> - [Scrum em 9 minutos](https://www.youtube.com/watch?v=XfvQWnRgxG0)
+O gerenciamento utiliza princípios de metodologias ágeis, adaptados ao desenvolvimento individual. As atividades são divididas em tarefas menores e acompanhadas por meio do GitHub, permitindo controlar o progresso do projeto.
 
 ### Processo
 
-Coloque  informações sobre detalhes da implementação do Scrum seguido pelo grupo. O grupo poderá fazer uso de ferramentas on-line para acompanhar o andamento do projeto, a execução das tarefas e o status de desenvolvimento da solução.
- 
-> **Links Úteis**:
-> - [Project management, made simple](https://github.com/features/project-management/)
-> - [Sobre quadros de projeto](https://docs.github.com/pt/github/managing-your-work-on-github/about-project-boards)
-> - [Como criar Backlogs no Github](https://www.youtube.com/watch?v=RXEy6CFu9Hk)
-> - [Tutorial Slack](https://slack.com/intl/en-br/)
+O desenvolvimento segue um fluxo incremental:
 
-### Ferramentas
+1. Identificação e planejamento da tarefa;
+2. Desenvolvimento da funcionalidade;
+3. Testes e correção de problemas;
+4. Integração da alteração ao projeto;
+5. Conclusão e atualização da tarefa.
 
-As ferramentas empregadas no projeto são:
+As tarefas podem ser organizadas em um quadro com os estados **A Fazer**, **Em Desenvolvimento**, **Em Teste** e **Concluído**.
 
-- Editor de código.
-- Ferramentas de comunicação
-- Ferramentas de desenho de tela (_wireframing_)
+## Ferramentas
 
-O editor de código foi escolhido porque ele possui uma integração com o
-sistema de versão. As ferramentas de comunicação utilizadas possuem
-integração semelhante e por isso foram selecionadas. Por fim, para criar
-diagramas utilizamos essa ferramenta por melhor captar as
-necessidades da nossa solução.
+As principais ferramentas utilizadas são:
 
-Liste quais ferramentas foram empregadas no desenvolvimento do projeto, justificando a escolha delas, sempre que possível.
- 
-> **Possíveis Ferramentas que auxiliarão no gerenciamento**: 
-> - [Slack](https://slack.com/)
-> - [Github](https://github.com/)
+* **Git:** controle de versão;
+* **GitHub:** hospedagem do código, gerenciamento de Issues e organização das tarefas;
+* **Visual Studio Code:** desenvolvimento e edição do código;
+* **Ferramentas de prototipação e wireframing:** planejamento das interfaces.
+
+Essas ferramentas foram escolhidas por atenderem às necessidades do projeto, permitindo organizar o desenvolvimento, controlar as versões do código e acompanhar as atividades de forma centralizada.
+
