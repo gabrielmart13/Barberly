@@ -10,9 +10,25 @@
 
 ## Projeto da Base de Dados
 
-O projeto da base de dados corresponde à representação das entidades e relacionamentos identificadas no Modelo ER, no formato de tabelas, com colunas e chaves primárias/estrangeiras necessárias para representar corretamente as restrições de integridade.
- 
-Para mais informações, consulte o microfundamento "Modelagem de Dados".
+Projeto da Base de Dados
+
+DONOBARBEARIA( idDonoBarbearia INT PK, nome VARCHAR(100), email VARCHAR(100), senha VARCHAR(255), contato VARCHAR(20) )
+
+BARBEARIA( idBarbearia INT PK, nome VARCHAR(100), endereco VARCHAR(200), contato VARCHAR(20), descricao VARCHAR(200), idDonoBarbearia INT FK → DONOBARBEARIA(idDonoBarbearia) )
+
+USUARIO( idUsuario INT PK, nome VARCHAR(100), email VARCHAR(100), senha VARCHAR(255), contato VARCHAR(20) )
+
+BARBEIRO( idBarbeiro INT PK, nome VARCHAR(100), email VARCHAR(100), contato VARCHAR(20), experiencia VARCHAR(100), idBarbearia INT FK → BARBEARIA(idBarbearia) )
+
+CATEGORIASERVICO( idCategoria INT PK, nome VARCHAR(50), descricao VARCHAR(200) )
+
+SERVICO( idServico INT PK, nome VARCHAR(100), valor DECIMAL(10,2), tempoEstimado INT, idCategoria INT FK → CATEGORIASERVICO(idCategoria), idBarbearia INT FK → BARBEARIA(idBarbearia) )
+
+HORARIOFUNCIONAMENTO( idHorario INT PK, diaSemana VARCHAR(20), horaAbertura TIME, horaFechamento TIME, idBarbearia INT FK → BARBEARIA(idBarbearia) )
+
+AGENDAMENTO( idAgendamento INT PK, dataHora DATETIME, status VARCHAR(20), idUsuario INT FK → USUARIO(idUsuario), idServico INT FK → SERVICO(idServico), idBarbeiro INT FK → BARBEIRO(idBarbeiro), idBarbearia INT FK → BARBEARIA(idBarbearia) )
+
+AVALIACAO( idAvaliacao INT PK, nota INT, comentario VARCHAR(200), dataAvaliacao DATETIME, idUsuario INT FK → USUARIO(idUsuario), idAgendamento INT FK → AGENDAMENTO(idAgendamento) )
 
 ## ATENÇÃO!!!
 
