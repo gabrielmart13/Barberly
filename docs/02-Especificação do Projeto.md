@@ -2,21 +2,26 @@
 
 ## Histórias de Usuários
 
-Com base na análise das personas forma identificadas as seguintes histórias de usuários:
-
 |EU COMO... `PERSONA`| QUERO/PRECISO ... `FUNCIONALIDADE` |PARA ... `MOTIVO/VALOR`                 |
 |--------------------|------------------------------------|----------------------------------------|
-|Ana Clara  | Uma forma de identificar se uma agência é realmente confiável           | Me sentir mais segura ao contratar seus serviços               |
-|Ana Clara       | Ter um mecanismo eficiente e rápido de comunicação                 | Que eu possa sanar todas as minhas dúvidas rapidamente |
-
-Apresente aqui as histórias de usuário que são relevantes para o projeto de sua solução. As Histórias de Usuário consistem em uma ferramenta poderosa para a compreensão e elicitação dos requisitos funcionais e não funcionais da sua aplicação. Se possível, agrupe as histórias de usuário por contexto, para facilitar consultas recorrentes à essa parte do documento.
-
-> **Links Úteis**:
-> - [Histórias de usuários com exemplos e template](https://www.atlassian.com/br/agile/project-management/user-stories)
-> - [Como escrever boas histórias de usuário (User Stories)](https://medium.com/vertice/como-escrever-boas-users-stories-hist%C3%B3rias-de-usu%C3%A1rios-b29c75043fac)
-> - [User Stories: requisitos que humanos entendem](https://www.luiztools.com.br/post/user-stories-descricao-de-requisitos-que-humanos-entendem/)
-> - [Histórias de Usuários: mais exemplos](https://www.reqview.com/doc/user-stories-example.html)
-> - [9 Common User Story Mistakes](https://airfocus.com/blog/user-story-mistakes/)
+|Dono da barbearia  | Cadastrar barbeiros disponíveis no sistema | Que os clientes possam escolher o profissional de sua preferência |
+|Dono da barbearia  | Cadastrar horários disponíveis para cada barbeiro | Que os clientes possam escolher horários adequados para seus serviços |
+|Dono da barbearia  | Cadastrar, editar e remover os serviços oferecidos | Manter as opções de serviços disponíveis aos clientes sempre atualizadas |
+|Dono da barbearia  | Definir os valores dos serviços oferecidos | Que os clientes possam consultar os preços antes de realizar um agendamento |
+|Dono da barbearia  | Visualizar os agendamentos realizados | Ter maior controle e organização sobre sua agenda |
+|Dono da barbearia  | Alterar o status de um agendamento | Manter o controle sobre o andamento dos atendimentos |
+|Dono da barbearia  | Cadastrar e editar as informações do estabelecimento | Disponibilizar informações importantes para os clientes |
+|Cliente            | Criar uma conta e realizar login facilmente | Acessar o sistema de forma rápida e segura |
+|Cliente            | Visualizar as barbearias disponíveis | Encontrar um estabelecimento que atenda às suas necessidades |
+|Cliente            | Visualizar os serviços oferecidos por uma barbearia | Escolher o serviço que deseja realizar |
+|Cliente            | Visualizar os barbeiros disponíveis | Escolher o profissional de sua preferência |
+|Cliente            | Consultar os horários disponíveis | Encontrar um horário adequado para realizar seu serviço |
+|Cliente            | Agendar um serviço com o barbeiro de sua preferência | Garantir seu atendimento no horário desejado |
+|Cliente            | Visualizar os dados do agendamento antes de confirmá-lo | Garantir que todas as informações estejam corretas |
+|Cliente            | Visualizar seus agendamentos | Acompanhar seus próximos atendimentos e respectivos status |
+|Cliente            | Cancelar um agendamento | Liberar o horário caso não possa comparecer |
+|Cliente            | Receber e-mails sobre seus agendamentos | Ser informado sobre confirmações, alterações e cancelamentos |
+|Cliente            | Consultar seu histórico de agendamentos | Acompanhar os serviços que já realizou |
 
 ## Requisitos
 
