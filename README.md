@@ -1,23 +1,12 @@
-# TÍTULO DO PROJETO
+# Barberly
 
-`CURSO`
+O Barberly é um sistema desenvolvido para facilitar e modernizar o agendamento de serviços em barbearias. O projeto busca solucionar dificuldades comuns enfrentadas pelos clientes, como a necessidade de realizar agendamentos por mensagens ou comparecer ao estabelecimento para garantir atendimento, oferecendo uma forma mais simples e organizada de consultar horários e marcar serviços.
 
-`DISCIPLINA`
+A solução também tem como objetivo auxiliar as barbearias na organização de seus horários e atendimentos, reduzindo a dependência de processos manuais. O sistema será desenvolvido com foco em simplicidade, praticidade e versatilidade, permitindo que diferentes barbearias possam utilizar a plataforma para melhorar a experiência de seus clientes e a gestão de seus agendamentos.
 
-`SEMESTRE`
+## Desenvolvedor
 
-Descrever resumidamente, em um ou dois parágrafos, o projeto que está sendo desenvolvido.
-
-## Integrantes
-
-* Nome completo do aluno 1
-* Nome completo do aluno 2
-* Nome completo do aluno 3
-* Nome completo do aluno 4
-
-## Orientador
-
-* Nome completo do professor
+- Gabriel Martins Pinto Coelho
 
 ## Instruções de Instalação, Execução e Acesso
 
