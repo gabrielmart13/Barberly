@@ -20,10 +20,7 @@
     </PackageReference>
     <PackageReference Include="MySql.Data" Version="26.7.0" />
     <PackageReference Include="MySql.EntityFrameworkCore" Version="10.0.9" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Controllers\" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="10.2.3" />
   </ItemGroup>
 
 </Project>
