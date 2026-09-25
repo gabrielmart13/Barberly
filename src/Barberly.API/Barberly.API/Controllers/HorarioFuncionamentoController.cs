@@ -28,7 +28,7 @@ namespace Barberly.API.Controllers
             var horariosfuncionamento = await _context.HorarioFuncionamentos.FirstOrDefaultAsync(x => x.IdHorario == id);
             if(horariosfuncionamento == null)
             {
-                return NotFound();
+                return NotFound("ID não encontrado");
             }
             return Ok(horariosfuncionamento);
         }
@@ -48,7 +48,7 @@ namespace Barberly.API.Controllers
             var horariosfuncionamento = await _context.HorarioFuncionamentos.FirstOrDefaultAsync(x => x.IdHorario == id);
             if(horariosfuncionamento == null)
             {
-                return NotFound();
+                return NotFound("ID não encontrado");
             }
 
             horariosfuncionamento.HoraAbertura = horariofuncionamento.HoraAbertura;
@@ -66,12 +66,12 @@ namespace Barberly.API.Controllers
             var horariosfuncionamento = await _context.HorarioFuncionamentos.FirstOrDefaultAsync(x => x.IdHorario == id);
             if(horariosfuncionamento == null)
             {
-                return NotFound();
+                return NotFound("ID não encontrado");
             }
 
             _context.HorarioFuncionamentos.Remove(horariosfuncionamento);
             _context.SaveChangesAsync();
-            return Ok(horariosfuncionamento);
+            return NoContent();
         }
     }
 }

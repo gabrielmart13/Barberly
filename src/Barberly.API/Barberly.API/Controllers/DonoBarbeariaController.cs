@@ -21,7 +21,7 @@ namespace Barberly.API.Controllers
             var donobarbearias = await _context.DonoBarbearias.FirstOrDefaultAsync(x => x.IdDonoBarbearia == id);
             if(donobarbearias == null)
             {
-                return NotFound();
+                return NotFound("ID não encontrado");
             }
             return Ok(donobarbearias);
         }
@@ -41,7 +41,7 @@ namespace Barberly.API.Controllers
             var donobarbearias = await _context.DonoBarbearias.FirstOrDefaultAsync(x => x.IdDonoBarbearia == id);
             if (donobarbearias == null)
             {
-                return NotFound();
+                return NotFound("ID não encontrado");
             }
             donobarbearias.Nome = donobarbearia.Nome;
             donobarbearias.Senha = donobarbearia.Senha;
@@ -58,13 +58,13 @@ namespace Barberly.API.Controllers
             var donobarbearias = await _context.DonoBarbearias.FirstOrDefaultAsync(x => x.IdDonoBarbearia == id);
             if (donobarbearias == null)
             {
-                return NotFound();
+                return NotFound("ID não encontrado");
             }
 
             _context.DonoBarbearias.Remove(donobarbearias);
             await _context.SaveChangesAsync();
 
-            return Ok(donobarbearias);
+            return NoContent();
         }
     }
 }

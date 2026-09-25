@@ -30,7 +30,7 @@ namespace Barberly.API.Controllers
 
             if (agendamentos == null)
             {
-                return NotFound();
+                return NotFound("ID não encontrado");
             }
 
             return Ok(agendamentos);
@@ -53,13 +53,13 @@ namespace Barberly.API.Controllers
 
             if (agendamentos == null)
             {
-                return NotFound();
+                return NotFound("ID não encontrado");
             }
 
             _context.Agendamentos.Remove(agendamentos);
             await _context.SaveChangesAsync();
 
-            return Ok(agendamentos);
+            return NoContent();
         }
     }
 }

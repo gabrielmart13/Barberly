@@ -28,7 +28,7 @@ namespace Barberly.API.Controllers
             var servicos = await _context.Servicos.FirstOrDefaultAsync(x => x.IdServico == id);
             if(servicos == null)
             {
-                return NotFound();
+                return NotFound("ID não encontrado");
             }
             return Ok(servicos);
         }
@@ -48,7 +48,7 @@ namespace Barberly.API.Controllers
             var servicos = await _context.Servicos.FirstOrDefaultAsync(x => x.IdServico == id);
             if(servicos == null)
             {
-                return NotFound();
+                return NotFound("ID não encontrado");
             }
             servicos.IdBarbearia = servico.IdBarbearia;
             servicos.IdCategoria = servico.IdCategoria;
@@ -66,12 +66,12 @@ namespace Barberly.API.Controllers
             var servicos = await _context.Servicos.FirstOrDefaultAsync(x => x.IdServico == id);
             if(servicos == null)
             {
-                return NotFound();
+                return NotFound("ID não encontrado");
             }
 
             _context.Servicos.Remove(servicos);
             await _context.SaveChangesAsync();
-            return Ok(servicos);
+            return NoContent();
 
         }
     }

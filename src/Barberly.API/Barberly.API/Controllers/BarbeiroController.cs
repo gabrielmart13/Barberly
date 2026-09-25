@@ -28,7 +28,7 @@ namespace Barberly.API.Controllers
             var barbeiros = await _context.Barbeiros.FirstOrDefaultAsync(x => x.IdBarbeiro == id);
             if(barbeiros == null)
             {
-                return NotFound();
+                return NotFound("ID não encontrado");
             }
 
             return Ok(barbeiros);
@@ -49,7 +49,7 @@ namespace Barberly.API.Controllers
             var barbeiros = await _context.Barbeiros.FirstOrDefaultAsync(x => x.IdBarbeiro == id);
             if (barbeiros == null)
             {
-                return NotFound();
+                return NotFound("ID não encontrado");
             }
             barbeiros.Contato = barbeiro.Contato;
             barbeiros.Email = barbeiro.Email;
@@ -67,13 +67,13 @@ namespace Barberly.API.Controllers
             var barbeiros = await _context.Barbeiros.FirstOrDefaultAsync(x => x.IdBarbeiro == id);
             if (barbeiros == null)
             {
-                return NotFound();
+                return NotFound("ID não encontrado");
             }
 
             _context.Barbeiros.Remove(barbeiros);
             await _context.SaveChangesAsync();
 
-            return Ok(barbeiros);
+            return NoContent();
         }
     }
 }

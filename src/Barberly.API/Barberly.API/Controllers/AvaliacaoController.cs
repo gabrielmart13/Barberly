@@ -28,7 +28,7 @@ namespace Barberly.API.Controllers
             var avaliacoes = await _context.Avaliacoes.FirstOrDefaultAsync(x => x.IdAvaliacao == id);
             if(avaliacoes == null)
             {
-                return NotFound();
+                return NotFound("ID não encontrado");
             }
             
             return Ok(avaliacoes);
@@ -49,7 +49,7 @@ namespace Barberly.API.Controllers
             var avaliacoes = await _context.Avaliacoes.FirstOrDefaultAsync(x => x.IdAvaliacao == id);
             if (avaliacoes == null)
             {
-                return NotFound();
+                return NotFound("ID não encontrado");
             }
 
             avaliacoes.Agendamento = avaliacao.Agendamento;
@@ -70,13 +70,13 @@ namespace Barberly.API.Controllers
             var avaliacoes = await _context.Avaliacoes.FirstOrDefaultAsync(x => x.IdAvaliacao == id);
             if (avaliacoes == null)
             {
-                return NotFound();
+                return NotFound("ID não encontrado");
             }
 
             _context.Avaliacoes.Remove(avaliacoes);
             await _context.SaveChangesAsync();
 
-            return Ok(avaliacoes);
+            return NoContent();
         }
 
     }
