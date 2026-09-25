@@ -1,6 +1,7 @@
 ﻿using Barberly.API.Data;
 using Barberly.API.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Barberly.API.Controllers
 {
@@ -15,27 +16,50 @@ namespace Barberly.API.Controllers
         }
 
         [HttpGet]
-        public ActionResult <List<Agendamento>> Get()
+        public async Task<ActionResult<List<Agendamento>>> Get()
         {
-            return new List<Agendamento>();
+            var agendamentos = await _context.Agendamentos.ToListAsync();
+            return Ok(agendamentos);
         }
 
         [HttpGet("{id}")]
-        public ActionResult <Agendamento> Get(int id)
+        public async Task<ActionResult<Agendamento>> Get(int id)
         {
-            return new Agendamento();
+            var agendamentos = await _context.Agendamentos
+                .FirstOrDefaultAsync(x => x.IdAgendamento == id);
+
+            if (agendamentos == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(agendamentos);
         }
 
         [HttpPost]
-        public ActionResult <Agendamento> Post(Agendamento agendamento)
+        public async Task<ActionResult<Agendamento>> Post(Agendamento agendamento)
         {
-            return new Agendamento();
+            await _context.Agendamentos.AddAsync(agendamento);
+            await _context.SaveChangesAsync();
+
+            return Ok(agendamento);
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            return NoContent ();
+            var agendamentos = await _context.Agendamentos
+                .FirstOrDefaultAsync(x => x.IdAgendamento == id);
+
+            if (agendamentos == null)
+            {
+                return NotFound();
+            }
+
+            _context.Agendamentos.Remove(agendamentos);
+            await _context.SaveChangesAsync();
+
+            return Ok(agendamentos);
         }
     }
 }

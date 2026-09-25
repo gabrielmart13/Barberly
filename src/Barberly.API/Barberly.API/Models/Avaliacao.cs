@@ -14,11 +14,11 @@ namespace Barberly.API.Models
         public int IdUsuario { get; set; }
 
         [ForeignKey(nameof(IdUsuario))]
-        public Usuario Usuario { get; set; }
+        public Usuario? Usuario { get; set; }
 
         public int IdAgendamento { get; set; }
 
         [ForeignKey(nameof(IdAgendamento))]
-        public Agendamento Agendamento { get; set; }
+        public Agendamento? Agendamento { get; set; }
     }
 }

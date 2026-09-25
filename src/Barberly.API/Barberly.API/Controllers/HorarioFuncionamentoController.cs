@@ -1,6 +1,7 @@
 ﻿using Barberly.API.Data;
 using Barberly.API.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Barberly.API.Controllers
 {
@@ -15,33 +16,62 @@ namespace Barberly.API.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<HorarioFuncionamento>> Get()
+        public async Task<ActionResult<List<HorarioFuncionamento>>> Get()
         {
-            return new List<HorarioFuncionamento>();
+            var horariosfuncionamento = await _context.HorarioFuncionamentos.ToListAsync();
+            return Ok(horariosfuncionamento);
         }
 
         [HttpGet("{id}")]
-        public ActionResult<HorarioFuncionamento> Get(int id)
+        public async Task<ActionResult<HorarioFuncionamento>> Get(int id)
         {
-            return new HorarioFuncionamento();
+            var horariosfuncionamento = await _context.HorarioFuncionamentos.FirstOrDefaultAsync(x => x.IdHorario == id);
+            if(horariosfuncionamento == null)
+            {
+                return NotFound();
+            }
+            return Ok(horariosfuncionamento);
         }
 
         [HttpPost]
-        public ActionResult<HorarioFuncionamento> Post(HorarioFuncionamento horariofuncionamento)
+        public async Task<ActionResult<HorarioFuncionamento>> Post(HorarioFuncionamento horariofuncionamento)
         {
-            return new HorarioFuncionamento();
+            await _context.HorarioFuncionamentos.AddAsync(horariofuncionamento);
+            await _context.SaveChangesAsync();
+
+            return Ok(horariofuncionamento);
         }
 
         [HttpPut("{id}")]
-        public ActionResult<HorarioFuncionamento> Put(int id, HorarioFuncionamento horariofuncionamento)
+        public async Task<ActionResult<HorarioFuncionamento>> Put(int id, HorarioFuncionamento horariofuncionamento)
         {
-            return new HorarioFuncionamento();
+            var horariosfuncionamento = await _context.HorarioFuncionamentos.FirstOrDefaultAsync(x => x.IdHorario == id);
+            if(horariosfuncionamento == null)
+            {
+                return NotFound();
+            }
+
+            horariosfuncionamento.HoraAbertura = horariofuncionamento.HoraAbertura;
+            horariosfuncionamento.HoraFechamento = horariofuncionamento.HoraFechamento;
+            horariosfuncionamento.DiaSemana = horariofuncionamento.DiaSemana;
+            horariosfuncionamento.IdBarbearia = horariofuncionamento.IdBarbearia;
+
+            await _context.SaveChangesAsync();
+            return Ok(horariosfuncionamento);
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            return NoContent();
+            var horariosfuncionamento = await _context.HorarioFuncionamentos.FirstOrDefaultAsync(x => x.IdHorario == id);
+            if(horariosfuncionamento == null)
+            {
+                return NotFound();
+            }
+
+            _context.HorarioFuncionamentos.Remove(horariosfuncionamento);
+            _context.SaveChangesAsync();
+            return Ok(horariosfuncionamento);
         }
     }
 }

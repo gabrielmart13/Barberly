@@ -14,6 +14,6 @@ namespace Barberly.API.Models
         public int IdBarbearia { get; set; }
 
         [ForeignKey(nameof(IdBarbearia))]
-        public Barbearia Barbearia { get; set; }
+        public Barbearia? Barbearia { get; set; }
     }
 }

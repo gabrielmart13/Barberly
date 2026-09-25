@@ -1,6 +1,7 @@
 ﻿using Barberly.API.Data;
 using Barberly.API.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Barberly.API.Controllers
 {
@@ -15,33 +16,63 @@ namespace Barberly.API.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<CategoriaServico>> Get()
+        public async Task<ActionResult<List<CategoriaServico>>> Get()
         {
-            return new List<CategoriaServico>();
+            var categoriaservicos = await _context.CategoriaServicos.ToListAsync();
+            return Ok(categoriaservicos);
         }
 
         [HttpGet("{id}")]
-        public ActionResult<CategoriaServico> Get(int id)
+        public async Task<ActionResult<CategoriaServico>> Get(int id)
         {
-            return new CategoriaServico();
+            var categoriaservicos = await _context.CategoriaServicos.FirstOrDefaultAsync(x => x.IdCategoria == id);
+            if(categoriaservicos == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(categoriaservicos);
         }
 
         [HttpPost]
-        public ActionResult<CategoriaServico> Post(CategoriaServico categoriaservico)
+        public async Task<ActionResult<CategoriaServico>> Post(CategoriaServico categoriaservico)
         {
-            return new CategoriaServico();
+            await _context.CategoriaServicos.AddAsync(categoriaservico);
+            await _context.SaveChangesAsync();
+
+            return Ok(categoriaservico);
         }
 
         [HttpPut("{id}")]
-        public ActionResult<CategoriaServico> Put(int id, CategoriaServico categoriaservico)
+        public async Task<ActionResult<CategoriaServico>> Put(int id, CategoriaServico categoriaservico)
         {
-            return new CategoriaServico();
+            var categoriaservicos = await _context.CategoriaServicos.FirstOrDefaultAsync(x => x.IdCategoria == id);
+            if(categoriaservicos == null)
+            {
+                return NotFound();
+            }
+
+            categoriaservicos.Descricao = categoriaservico.Descricao;
+            categoriaservicos.Nome = categoriaservico.Nome;
+
+            await _context.SaveChangesAsync();
+            return Ok(categoriaservicos);
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            return NoContent();
+            var categoriaservicos = await _context.CategoriaServicos.FirstOrDefaultAsync(x => x.IdCategoria == id);
+            if(categoriaservicos == null)
+            {
+                return NotFound();
+            }
+            _context.CategoriaServicos.Remove(categoriaservicos);
+            await _context.SaveChangesAsync();
+
+            return Ok(categoriaservicos);
+
+
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Barberly.API.Data;
 using Barberly.API.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Barberly.API.Controllers
 {
@@ -15,36 +16,68 @@ namespace Barberly.API.Controllers
         }
 
         [HttpGet]
-        public ActionResult <List<Avaliacao>> Get()
+        public async Task<ActionResult <List<Avaliacao>>> Get()
         {
-            return new List<Avaliacao>();
+            var avaliacoes = await _context.Avaliacoes.ToListAsync();
+            return Ok(avaliacoes);
         }
 
         [HttpGet("{id}")]
-        public ActionResult <Avaliacao> Get(int id)
+        public async Task<ActionResult <Avaliacao>> Get(int id)
         {
-            return new Avaliacao();
+            var avaliacoes = await _context.Avaliacoes.FirstOrDefaultAsync(x => x.IdAvaliacao == id);
+            if(avaliacoes == null)
+            {
+                return NotFound();
+            }
+            
+            return Ok(avaliacoes);
         }
 
         [HttpPost]
-        public ActionResult <Avaliacao> Post(Avaliacao avaliacao)
+        public async Task<ActionResult <Avaliacao>> Post(Avaliacao avaliacao)
         {
-            return new Avaliacao();
+            await _context.Avaliacoes.AddAsync(avaliacao);
+            await _context.SaveChangesAsync();
+
+            return Ok(avaliacao);
         }
 
         [HttpPut("{id}")]
-        public ActionResult <Avaliacao> Put(int id, Avaliacao avaliacao)
+        public async Task<ActionResult <Avaliacao>> Put(int id, Avaliacao avaliacao)
         {
-            return new Avaliacao();
+            var avaliacoes = await _context.Avaliacoes.FirstOrDefaultAsync(x => x.IdAvaliacao == id);
+            if (avaliacoes == null)
+            {
+                return NotFound();
+            }
+
+            avaliacoes.Agendamento = avaliacao.Agendamento;
+            avaliacoes.Comentario = avaliacao.Comentario;
+            avaliacoes.DataAvaliacao = avaliacao.DataAvaliacao;
+            avaliacoes.Nota = avaliacao.Nota;
+            avaliacoes.IdAgendamento = avaliacao.IdAgendamento;
+            avaliacoes.IdUsuario = avaliacao.IdUsuario;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(avaliacoes);
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            return NoContent();
+            var avaliacoes = await _context.Avaliacoes.FirstOrDefaultAsync(x => x.IdAvaliacao == id);
+            if (avaliacoes == null)
+            {
+                return NotFound();
+            }
+
+            _context.Avaliacoes.Remove(avaliacoes);
+            await _context.SaveChangesAsync();
+
+            return Ok(avaliacoes);
         }
 
-
-        
     }
 }

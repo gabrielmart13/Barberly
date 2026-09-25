@@ -1,6 +1,7 @@
 ﻿using Barberly.API.Data;
 using Barberly.API.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Barberly.API.Controllers
 {
@@ -15,33 +16,64 @@ namespace Barberly.API.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<Barbearia>> Get()
+        public async Task<ActionResult<List<Barbearia>>> Get()
         {
-            return new List<Barbearia>();
+            var barbearias = await _context.Barbearias.Include(x => x.DonoBarbearia).ToListAsync();
+            return Ok(barbearias);
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Barbearia> Get(int id)
+        public async Task<ActionResult<Barbearia>> Get(int id)
         {
-            return new Barbearia();
+            var barbearias = await _context.Barbearias.Include(x=> x.DonoBarbearia).FirstOrDefaultAsync(x => x.IdBarbearia == id);
+            if(barbearias == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(barbearias);
         }
 
         [HttpPost]
-        public ActionResult<Barbearia> Post(Barbearia barbearia)
+        public async Task<ActionResult<Barbearia>> Post(Barbearia barbearia)
         {
-            return new Barbearia();
+            await _context.Barbearias.AddAsync(barbearia);
+            await _context.SaveChangesAsync();
+
+            return Ok(barbearia);
         }
 
         [HttpPut("{id}")]
-        public ActionResult<Barbearia> Put(int id, Barbearia barbearia)
+        public async Task<ActionResult<Barbearia>> Put(int id, Barbearia barbearia)
         {
-            return new Barbearia();
+            var barbearias = await _context.Barbearias.FirstOrDefaultAsync(x => x.IdBarbearia == id);
+            if (barbearias == null)
+            {
+                return NotFound();
+            }
+
+            barbearias.Contato = barbearia.Contato;
+            barbearias.Descricao = barbearia.Descricao;
+            barbearias.Endereco = barbearia.Endereco;
+            barbearias.IdDonoBarbearia = barbearia.IdDonoBarbearia;
+            barbearias.Nome = barbearia.Nome;
+
+            await _context.SaveChangesAsync();
+            return Ok(barbearias);
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            return NoContent();
+            var barbearias = await _context.Barbearias.FirstOrDefaultAsync(x => x.IdBarbearia == id);
+            if (barbearias == null)
+            {
+                return NotFound();
+            }
+            _context.Barbearias.Remove(barbearias);
+            await _context.SaveChangesAsync();
+
+            return Ok(barbearias);
         }
     }
 }

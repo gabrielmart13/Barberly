@@ -1,6 +1,7 @@
 ﻿using Barberly.API.Data;
 using Barberly.API.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Barberly.API.Controllers
 {
@@ -15,27 +16,59 @@ namespace Barberly.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Usuario> Get(int id)
+        public async Task<ActionResult<Usuario>> Get(int id)
         {
-            return new Usuario();
+            var usuarios = await _context.Usuarios.FirstOrDefaultAsync(x => x.IdUsuario == id);
+            if(usuarios == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(usuarios);
         }
 
         [HttpPost]
-        public ActionResult<Usuario> Post(Usuario usuario)
+        public async Task<ActionResult<Usuario>> Post(Usuario usuario)
         {
-            return new Usuario();
+            await _context.Usuarios.AddAsync(usuario);
+            await _context.SaveChangesAsync();
+
+            return Ok(usuario);
+
         }
 
         [HttpPut("{id}")]
-        public ActionResult<Usuario> Put(int id, Usuario usuario)
+        public async Task<ActionResult<Usuario>> Put(int id, Usuario usuario)
         {
-            return new Usuario();
+            var usuarios = await _context.Usuarios.FirstOrDefaultAsync(x => x.IdUsuario == id);
+            if(usuarios == null)
+            {
+                return NotFound();
+            }
+
+            usuarios.Contato = usuario.Contato;
+            usuarios.Nome = usuario.Nome;
+            usuarios.Email = usuario.Email;
+            usuarios.Senha = usuario.Senha;
+
+            await _context.SaveChangesAsync();
+
+
+            return Ok(usuarios);
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            return NoContent();
+            var usuarios = await _context.Usuarios.FirstOrDefaultAsync(x => x.IdUsuario == id);
+
+            if(usuarios == null)
+            {
+                return NotFound();
+            }
+            _context.Usuarios.Remove(usuarios);
+            await _context.SaveChangesAsync();
+            return Ok(usuarios);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Barberly.API.Data;
 using Barberly.API.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Barberly.API.Controllers
 {
@@ -15,33 +16,63 @@ namespace Barberly.API.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<Servico>> Get()
+        public async Task<ActionResult<List<Servico>>> Get()
         {
-            return new List<Servico>();
+            var servicos = await _context.Servicos.ToListAsync();
+            return Ok(servicos);
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Servico> Get(int id)
+        public async Task<ActionResult<Servico>> Get(int id)
         {
-            return new Servico();
+            var servicos = await _context.Servicos.FirstOrDefaultAsync(x => x.IdServico == id);
+            if(servicos == null)
+            {
+                return NotFound();
+            }
+            return Ok(servicos);
         }
 
         [HttpPost]
-        public ActionResult<Servico> Post(Servico servico)
+        public async Task<ActionResult<Servico>> Post(Servico servico)
         {
-            return new Servico();
+            await _context.Servicos.AddAsync(servico);
+            await _context.SaveChangesAsync();
+
+            return Ok(servico);
         }
 
         [HttpPut("{id}")]
-        public ActionResult<Servico> Put(int id, Servico servico)
+        public async Task<ActionResult<Servico>> Put(int id, Servico servico)
         {
-            return new Servico();
+            var servicos = await _context.Servicos.FirstOrDefaultAsync(x => x.IdServico == id);
+            if(servicos == null)
+            {
+                return NotFound();
+            }
+            servicos.IdBarbearia = servico.IdBarbearia;
+            servicos.IdCategoria = servico.IdCategoria;
+            servicos.Valor = servico.Valor;
+            servicos.Nome = servico.Nome;
+            servicos.TempoEstimado = servico.TempoEstimado;
+
+            await _context.SaveChangesAsync();
+            return Ok(servicos);
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            return NoContent();
+            var servicos = await _context.Servicos.FirstOrDefaultAsync(x => x.IdServico == id);
+            if(servicos == null)
+            {
+                return NotFound();
+            }
+
+            _context.Servicos.Remove(servicos);
+            await _context.SaveChangesAsync();
+            return Ok(servicos);
+
         }
     }
 }

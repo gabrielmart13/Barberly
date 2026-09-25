@@ -1,6 +1,7 @@
 ﻿using Barberly.API.Data;
 using Barberly.API.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Barberly.API.Controllers
 {
@@ -15,27 +16,55 @@ namespace Barberly.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<DonoBarbearia> Get(int id)
+        public async Task<ActionResult<DonoBarbearia>> Get(int id)
         {
-            return new DonoBarbearia();
+            var donobarbearias = await _context.DonoBarbearias.FirstOrDefaultAsync(x => x.IdDonoBarbearia == id);
+            if(donobarbearias == null)
+            {
+                return NotFound();
+            }
+            return Ok(donobarbearias);
         }
 
         [HttpPost]
-        public ActionResult<DonoBarbearia> Post(DonoBarbearia donobarbearia)
+        public async Task<ActionResult<DonoBarbearia>> Post(DonoBarbearia donobarbearia)
         {
-            return new DonoBarbearia();
+            await _context.DonoBarbearias.AddAsync(donobarbearia);
+            await _context.SaveChangesAsync();
+
+            return Ok(donobarbearia);
         }
 
         [HttpPut("{id}")]
-        public ActionResult<DonoBarbearia> Put(int id, DonoBarbearia donobarbearia)
+        public async Task<ActionResult<DonoBarbearia>> Put(int id, DonoBarbearia donobarbearia)
         {
-            return new DonoBarbearia();
+            var donobarbearias = await _context.DonoBarbearias.FirstOrDefaultAsync(x => x.IdDonoBarbearia == id);
+            if (donobarbearias == null)
+            {
+                return NotFound();
+            }
+            donobarbearias.Nome = donobarbearia.Nome;
+            donobarbearias.Senha = donobarbearia.Senha;
+            donobarbearias.Email = donobarbearia.Email;
+            donobarbearias.Contato = donobarbearia.Contato;
+
+            await _context.SaveChangesAsync();
+            return Ok(donobarbearias);
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            return NoContent();
+            var donobarbearias = await _context.DonoBarbearias.FirstOrDefaultAsync(x => x.IdDonoBarbearia == id);
+            if (donobarbearias == null)
+            {
+                return NotFound();
+            }
+
+            _context.DonoBarbearias.Remove(donobarbearias);
+            await _context.SaveChangesAsync();
+
+            return Ok(donobarbearias);
         }
     }
 }

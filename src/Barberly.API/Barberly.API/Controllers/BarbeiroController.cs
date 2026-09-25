@@ -1,6 +1,7 @@
 ﻿using Barberly.API.Data;
 using Barberly.API.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Barberly.API.Controllers
 {
@@ -15,33 +16,64 @@ namespace Barberly.API.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<Barbeiro>> Get()
+        public async Task<ActionResult<List<Barbeiro>>> Get()
         {
-            return new List<Barbeiro>();
+            var barbeiros = await _context.Barbeiros.ToListAsync();
+            return Ok(barbeiros);
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Barbeiro> Get(int id)
+        public async Task<ActionResult<Barbeiro>> Get(int id)
         {
-            return new Barbeiro();
+            var barbeiros = await _context.Barbeiros.FirstOrDefaultAsync(x => x.IdBarbeiro == id);
+            if(barbeiros == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(barbeiros);
         }
 
         [HttpPost]
-        public ActionResult<Barbeiro> Post(Barbeiro barbeiro)
+        public async Task<ActionResult<Barbeiro>> Post(Barbeiro barbeiro)
         {
-            return new Barbeiro();
+            await _context.Barbeiros.AddAsync(barbeiro);
+            await _context.SaveChangesAsync();
+
+            return Ok(barbeiro);
         }
 
         [HttpPut("{id}")]
-        public ActionResult<Barbeiro> Put(int id, Barbeiro barbeiro)
+        public async Task<ActionResult<Barbeiro>> Put(int id, Barbeiro barbeiro)
         {
-            return new Barbeiro();
+            var barbeiros = await _context.Barbeiros.FirstOrDefaultAsync(x => x.IdBarbeiro == id);
+            if (barbeiros == null)
+            {
+                return NotFound();
+            }
+            barbeiros.Contato = barbeiro.Contato;
+            barbeiros.Email = barbeiro.Email;
+            barbeiros.Experiencia = barbeiro.Experiencia;
+            barbeiros.IdBarbearia = barbeiro.IdBarbearia;
+            barbeiros.Nome = barbeiro.Nome;
+
+            await _context.SaveChangesAsync();
+            return Ok(barbeiros);
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            return NoContent();
+            var barbeiros = await _context.Barbeiros.FirstOrDefaultAsync(x => x.IdBarbeiro == id);
+            if (barbeiros == null)
+            {
+                return NotFound();
+            }
+
+            _context.Barbeiros.Remove(barbeiros);
+            await _context.SaveChangesAsync();
+
+            return Ok(barbeiros);
         }
     }
 }

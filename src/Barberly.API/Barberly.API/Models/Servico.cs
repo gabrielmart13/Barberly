@@ -13,11 +13,11 @@ namespace Barberly.API.Models
         public int IdCategoria { get; set; }
 
         [ForeignKey(nameof(IdCategoria))]
-        public CategoriaServico Categoria { get; set; }
+        public CategoriaServico? Categoria { get; set; }
         public int IdBarbearia { get; set; }
 
         [ForeignKey(nameof(IdBarbearia))]
-        public Barbearia Barbearia { get; set; }
+        public Barbearia? Barbearia { get; set; }
 
     }
 }
