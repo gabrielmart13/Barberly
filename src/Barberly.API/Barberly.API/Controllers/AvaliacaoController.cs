@@ -1,5 +1,7 @@
 ﻿using Barberly.API.Data;
-using Barberly.API.Models;
+using Barberly.API.Domain.DTOs.AvaliacaoDTO;
+using Barberly.API.Domain.Models;
+using Barberly.API.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,74 +11,64 @@ namespace Barberly.API.Controllers
     [Route("api/[controller]")]
     public class AvaliacaoController : ControllerBase
     {
-        private readonly DataContext _context;
-        public AvaliacaoController (DataContext context)
+        private readonly IAvaliacaoService _avaliacaoService;
+        public AvaliacaoController(IAvaliacaoService avaliacaoService)
         {
-            _context = context;
+            _avaliacaoService = avaliacaoService;
         }
 
         [HttpGet]
         public async Task<ActionResult <List<Avaliacao>>> Get()
         {
-            var avaliacoes = await _context.Avaliacoes.ToListAsync();
+            var avaliacoes = await _avaliacaoService.PegarAvaliacoesAsync();
             return Ok(avaliacoes);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult <Avaliacao>> Get(int id)
         {
-            var avaliacoes = await _context.Avaliacoes.FirstOrDefaultAsync(x => x.IdAvaliacao == id);
-            if(avaliacoes == null)
-            {
-                return NotFound("ID não encontrado");
-            }
-            
+            var avaliacoes = await _avaliacaoService.PegarAvaliacaoAsync(id);
+
             return Ok(avaliacoes);
         }
 
         [HttpPost]
-        public async Task<ActionResult <Avaliacao>> Post(Avaliacao avaliacao)
+        public async Task<ActionResult <Avaliacao>> Post(CriarAvaliacaoRequest request)
         {
-            await _context.Avaliacoes.AddAsync(avaliacao);
-            await _context.SaveChangesAsync();
+            Avaliacao avaliacao = new Avaliacao
+            {
+                Nota = request.Nota,
+                Comentario = request.Comentario,
+                IdUsuario = request.IdUsuario,
+                IdAgendamento = request.IdAgendamento
+            };
 
+            await _avaliacaoService.CriarAvaliacaoAsync(avaliacao);
             return Ok(avaliacao);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult <Avaliacao>> Put(int id, Avaliacao avaliacao)
+        public async Task<ActionResult <Avaliacao>> Put(int id, AtualizarAvaliacaoRequest request)
         {
-            var avaliacoes = await _context.Avaliacoes.FirstOrDefaultAsync(x => x.IdAvaliacao == id);
-            if (avaliacoes == null)
+            var avaliacaoExist = await _avaliacaoService.PegarAvaliacaoAsync(id);
+            Avaliacao avaliacao = new Avaliacao
             {
-                return NotFound("ID não encontrado");
-            }
+                Nota = request.Nota,
+                Comentario = request.Comentario,
+                IdAgendamento = avaliacaoExist.IdAgendamento,
+                IdUsuario = avaliacaoExist.IdUsuario
 
-            avaliacoes.Agendamento = avaliacao.Agendamento;
-            avaliacoes.Comentario = avaliacao.Comentario;
-            avaliacoes.DataAvaliacao = avaliacao.DataAvaliacao;
-            avaliacoes.Nota = avaliacao.Nota;
-            avaliacoes.IdAgendamento = avaliacao.IdAgendamento;
-            avaliacoes.IdUsuario = avaliacao.IdUsuario;
+            };
+            
 
-            await _context.SaveChangesAsync();
-
-            return Ok(avaliacoes);
+            await _avaliacaoService.AtualizarAvaliacaoAsync(id,avaliacao);
+            return Ok(avaliacao);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var avaliacoes = await _context.Avaliacoes.FirstOrDefaultAsync(x => x.IdAvaliacao == id);
-            if (avaliacoes == null)
-            {
-                return NotFound("ID não encontrado");
-            }
-
-            _context.Avaliacoes.Remove(avaliacoes);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            return Ok(await _avaliacaoService.DeletarAvaliacaoAsync(id));
         }
 
     }

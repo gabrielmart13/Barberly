@@ -1,7 +1,7 @@
-﻿using Barberly.API.Data;
-using Barberly.API.Models;
+﻿using Barberly.API.Domain.DTOs.DonoBarbeariaDTO;
+using Barberly.API.Domain.Models;
+using Barberly.API.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Barberly.API.Controllers
 {
@@ -9,62 +9,63 @@ namespace Barberly.API.Controllers
     [Route("api/[controller]")]
     public class DonoBarbeariaController : ControllerBase
     {
-        private readonly DataContext _context;
-        public DonoBarbeariaController (DataContext context)
+        private readonly IDonoBarbeariaService _donobarbeariaService;
+
+        public DonoBarbeariaController(IDonoBarbeariaService donobarbeariaService)
         {
-            _context = context;
+            _donobarbeariaService = donobarbeariaService;
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<DonoBarbearia>> Get(int id)
         {
-            var donobarbearias = await _context.DonoBarbearias.FirstOrDefaultAsync(x => x.IdDonoBarbearia == id);
-            if(donobarbearias == null)
-            {
-                return NotFound("ID não encontrado");
-            }
-            return Ok(donobarbearias);
+            var donobarbearia = await _donobarbeariaService.PegarDonoBarbeariaAsync(id);
+
+            return Ok(donobarbearia);
         }
 
         [HttpPost]
-        public async Task<ActionResult<DonoBarbearia>> Post(DonoBarbearia donobarbearia)
+        public async Task<ActionResult<DonoBarbearia>> Post(CriarDonoBarbeariaRequest request)
         {
-            await _context.DonoBarbearias.AddAsync(donobarbearia);
-            await _context.SaveChangesAsync();
+            DonoBarbearia donobarbearia = new DonoBarbearia
+            {
+                Nome = request.Nome,
+                Senha = request.Senha,
+                Email = request.Email,
+                Contato = request.Contato
+            };
+
+            await _donobarbeariaService.CriarDonoBarbeariaAsync(donobarbearia);
 
             return Ok(donobarbearia);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<DonoBarbearia>> Put(int id, DonoBarbearia donobarbearia)
+        public async Task<ActionResult<DonoBarbearia>> Put(
+            int id,
+            AtualizarDonoBarbeariaRequest request)
         {
-            var donobarbearias = await _context.DonoBarbearias.FirstOrDefaultAsync(x => x.IdDonoBarbearia == id);
-            if (donobarbearias == null)
+            DonoBarbearia donobarbearia = new DonoBarbearia
             {
-                return NotFound("ID não encontrado");
-            }
-            donobarbearias.Nome = donobarbearia.Nome;
-            donobarbearias.Senha = donobarbearia.Senha;
-            donobarbearias.Email = donobarbearia.Email;
-            donobarbearias.Contato = donobarbearia.Contato;
+                Nome = request.Nome,
+                Senha = request.Senha,
+                Email = request.Email,
+                Contato = request.Contato
+            };
 
-            await _context.SaveChangesAsync();
-            return Ok(donobarbearias);
+            await _donobarbeariaService.AtualizarDonoBarbeariaAsync(
+                id,
+                donobarbearia);
+
+            return Ok(donobarbearia);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            var donobarbearias = await _context.DonoBarbearias.FirstOrDefaultAsync(x => x.IdDonoBarbearia == id);
-            if (donobarbearias == null)
-            {
-                return NotFound("ID não encontrado");
-            }
-
-            _context.DonoBarbearias.Remove(donobarbearias);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            return Ok(
+                await _donobarbeariaService.DeletarDonoBarbeariaAsync(id)
+            );
         }
     }
 }

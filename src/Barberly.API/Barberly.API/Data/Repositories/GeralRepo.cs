@@ -40,6 +40,12 @@ namespace Barberly.API.Data.Repositories
             return entities;
         }
 
+        public async Task<T> Remover<T>(T entity) where T : class
+        {
+            _context.Set<T>().Remove(entity);
+            await _context.SaveChangesAsync();
+            return entity;
+        }
         public async Task<bool> SalvarMudancasAsync()
         {
             var resultado = await _context.SaveChangesAsync();

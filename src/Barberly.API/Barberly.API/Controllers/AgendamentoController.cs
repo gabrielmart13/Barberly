@@ -1,5 +1,7 @@
 ﻿using Barberly.API.Data;
-using Barberly.API.Models;
+using Barberly.API.Domain.DTOs.AgendamentoDTO;
+using Barberly.API.Domain.Models;
+using Barberly.API.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,57 +11,46 @@ namespace Barberly.API.Controllers
     [Route("api/[controller]")]
     public class AgendamentoController : ControllerBase
     {
-        private readonly DataContext _context;
-        public AgendamentoController(DataContext context)
+        private readonly IAgendamentoService _agendamentoService;
+        public AgendamentoController(IAgendamentoService agendamentoService)
         {
-            _context = context;
+            _agendamentoService = agendamentoService;
         }
 
         [HttpGet]
         public async Task<ActionResult<List<Agendamento>>> Get()
         {
-            var agendamentos = await _context.Agendamentos.ToListAsync();
+            var agendamentos = await _agendamentoService.PegarAgendamentosAsync();
             return Ok(agendamentos);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Agendamento>> Get(int id)
         {
-            var agendamentos = await _context.Agendamentos
-                .FirstOrDefaultAsync(x => x.IdAgendamento == id);
+            var agendamento = await _agendamentoService.PegarAgendamentoAsync(id);
 
-            if (agendamentos == null)
-            {
-                return NotFound("ID não encontrado");
-            }
-
-            return Ok(agendamentos);
+            return Ok(agendamento);
         }
 
         [HttpPost]
-        public async Task<ActionResult<Agendamento>> Post(Agendamento agendamento)
+        public async Task<ActionResult<Agendamento>> Post(CriarAgendamentoRequest request)
         {
-            await _context.Agendamentos.AddAsync(agendamento);
-            await _context.SaveChangesAsync();
-
+            Agendamento agendamento = new Agendamento
+            {
+                DataHora = request.DataHora,
+                IdUsuario = request.IdUsuario,
+                IdBarbearia = request.IdBarbearia,
+                IdBarbeiro = request.IdBarbeiro,
+                IdServico = request.IdServico
+            };
+            await _agendamentoService.CriarAgendamentoAsync(agendamento);
             return Ok(agendamento);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var agendamentos = await _context.Agendamentos
-                .FirstOrDefaultAsync(x => x.IdAgendamento == id);
-
-            if (agendamentos == null)
-            {
-                return NotFound("ID não encontrado");
-            }
-
-            _context.Agendamentos.Remove(agendamentos);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            return Ok(await _agendamentoService.DeletarAgendamentoAsync(id));
         }
     }
 }

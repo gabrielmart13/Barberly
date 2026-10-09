@@ -1,4 +1,4 @@
-﻿using Barberly.API.Models;
+﻿using Barberly.API.Domain.Models;
 
 namespace Barberly.API.Services.Interfaces
 {

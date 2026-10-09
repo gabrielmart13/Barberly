@@ -1,7 +1,10 @@
 ﻿using Barberly.API.Data;
-using Barberly.API.Models;
+using Barberly.API.Domain.DTOs.CategoriaServicoDTO;
+using Barberly.API.Domain.Models;
+using Barberly.API.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace Barberly.API.Controllers
 {
@@ -9,70 +12,55 @@ namespace Barberly.API.Controllers
     [Route("api/[controller]")]
     public class CategoriaServicoController : ControllerBase
     {
-        private readonly DataContext _context;
-        public CategoriaServicoController(DataContext context)
+        private readonly ICategoriaServicoService _categoriaservicoService;
+        public CategoriaServicoController(ICategoriaServicoService categoriaservicoService)
         {
-            _context = context;
+            _categoriaservicoService = categoriaservicoService;
         }
 
         [HttpGet]
         public async Task<ActionResult<List<CategoriaServico>>> Get()
         {
-            var categoriaservicos = await _context.CategoriaServicos.ToListAsync();
+            var categoriaservicos = _categoriaservicoService.PegarTodasCategoriasAsync();
             return Ok(categoriaservicos);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<CategoriaServico>> Get(int id)
         {
-            var categoriaservicos = await _context.CategoriaServicos.FirstOrDefaultAsync(x => x.IdCategoria == id);
-            if(categoriaservicos == null)
-            {
-                return NotFound("ID não encontrado");
-            }
-
-            return Ok(categoriaservicos);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult<CategoriaServico>> Post(CategoriaServico categoriaservico)
-        {
-            await _context.CategoriaServicos.AddAsync(categoriaservico);
-            await _context.SaveChangesAsync();
+            var categoriaservico = await _categoriaservicoService.PegarCategoriaAsync(id);
 
             return Ok(categoriaservico);
         }
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult<CategoriaServico>> Put(int id, CategoriaServico categoriaservico)
+        [HttpPost]
+        public async Task<ActionResult<CategoriaServico>> Post(CriarCategoriaRequest request)
         {
-            var categoriaservicos = await _context.CategoriaServicos.FirstOrDefaultAsync(x => x.IdCategoria == id);
-            if(categoriaservicos == null)
+            CategoriaServico categoriaServico = new CategoriaServico
             {
-                return NotFound("ID não encontrado");
-            }
+                Nome = request.Nome,
+                Descricao = request.Descricao
+            };
+            await _categoriaservicoService.CriarCategoriaAsync(categoriaServico);
+            return Ok(categoriaServico);
+        }
 
-            categoriaservicos.Descricao = categoriaservico.Descricao;
-            categoriaservicos.Nome = categoriaservico.Nome;
-
-            await _context.SaveChangesAsync();
-            return Ok(categoriaservicos);
+        [HttpPut("{id}")]
+        public async Task<ActionResult<CategoriaServico>> Put(int id, AtualizarCategoriaRequest request)
+        {
+            CategoriaServico categoriaServico = new CategoriaServico
+            {
+                Nome = request.Nome,
+                Descricao = request.Descricao
+            };
+            await _categoriaservicoService.AtualizarCategoriaAsync(id,categoriaServico);
+            return Ok(categoriaServico);
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var categoriaservicos = await _context.CategoriaServicos.FirstOrDefaultAsync(x => x.IdCategoria == id);
-            if(categoriaservicos == null)
-            {
-                return NotFound("ID não encontrado");
-            }
-            _context.CategoriaServicos.Remove(categoriaservicos);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-
-
+            return Ok(_categoriaservicoService.DeletarCategoriaAsync(id));
         }
     }
 }

@@ -1,7 +1,7 @@
-﻿using Barberly.API.Data;
-using Barberly.API.Models;
+﻿using Barberly.API.Domain.DTOs.UsuarioDTO;
+using Barberly.API.Domain.Models;
+using Barberly.API.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Barberly.API.Controllers
 {
@@ -9,66 +9,62 @@ namespace Barberly.API.Controllers
     [Route("api/[controller]")]
     public class UsuarioController : ControllerBase
     {
-        private readonly DataContext _context;
-        public UsuarioController(DataContext context)
+        private readonly IUsuarioService _usuarioService;
+
+        public UsuarioController(IUsuarioService usuarioService)
         {
-            _context = context;
+            _usuarioService = usuarioService;
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Usuario>> Get(int id)
         {
-            var usuarios = await _context.Usuarios.FirstOrDefaultAsync(x => x.IdUsuario == id);
-            if(usuarios == null)
-            {
-                return NotFound("ID não encontrado");
-            }
+            var usuario = await _usuarioService.PegarUsuarioAsync(id);
 
-            return Ok(usuarios);
+            return Ok(usuario);
         }
 
         [HttpPost]
-        public async Task<ActionResult<Usuario>> Post(Usuario usuario)
+        public async Task<ActionResult<Usuario>> Post(
+            CriarUsuarioRequest request)
         {
-            await _context.Usuarios.AddAsync(usuario);
-            await _context.SaveChangesAsync();
+            Usuario usuario = new Usuario
+            {
+                Nome = request.Nome,
+                Email = request.Email,
+                Senha = request.Senha,
+                Contato = request.Contato
+            };
+
+            await _usuarioService.CriarUsuarioAsync(usuario);
 
             return Ok(usuario);
-
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Usuario>> Put(int id, Usuario usuario)
+        public async Task<ActionResult<Usuario>> Put(
+            int id,
+            AtualizarUsuarioRequest request)
         {
-            var usuarios = await _context.Usuarios.FirstOrDefaultAsync(x => x.IdUsuario == id);
-            if(usuarios == null)
+            Usuario usuario = new Usuario
             {
-                return NotFound("ID não encontrado");
-            }
+                Nome = request.Nome,
+                Email = request.Email,
+                Senha = request.Senha,
+                Contato = request.Contato
+            };
 
-            usuarios.Contato = usuario.Contato;
-            usuarios.Nome = usuario.Nome;
-            usuarios.Email = usuario.Email;
-            usuarios.Senha = usuario.Senha;
+            await _usuarioService.AtualizarUsuarioAsync(id, usuario);
 
-            await _context.SaveChangesAsync();
-
-
-            return Ok(usuarios);
+            return Ok(usuario);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            var usuarios = await _context.Usuarios.FirstOrDefaultAsync(x => x.IdUsuario == id);
-
-            if(usuarios == null)
-            {
-                return NotFound("ID não encontrado");
-            }
-            _context.Usuarios.Remove(usuarios);
-            await _context.SaveChangesAsync();
-            return NoContent();
+            return Ok(
+                await _usuarioService.DeletarUsuarioAsync(id)
+            );
         }
     }
 }

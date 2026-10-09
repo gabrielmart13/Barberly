@@ -1,5 +1,7 @@
 ﻿using Barberly.API.Data;
-using Barberly.API.Models;
+using Barberly.API.Domain.DTOs.BarbeiroDTO;
+using Barberly.API.Domain.Models;
+using Barberly.API.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,71 +11,61 @@ namespace Barberly.API.Controllers
     [Route("api/[controller]")]
     public class BarbeiroController : ControllerBase
     {
-        private readonly DataContext _context;
-        public BarbeiroController (DataContext context)
+        private readonly IBarbeiroService _barbeiroService;
+        public BarbeiroController (IBarbeiroService barbeiroService)
         {
-            _context = context;
+            _barbeiroService = barbeiroService;
         }
 
         [HttpGet]
         public async Task<ActionResult<List<Barbeiro>>> Get()
         {
-            var barbeiros = await _context.Barbeiros.ToListAsync();
+            var barbeiros = await _barbeiroService.PegarTodosBarbeirosAsync();
             return Ok(barbeiros);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Barbeiro>> Get(int id)
         {
-            var barbeiros = await _context.Barbeiros.FirstOrDefaultAsync(x => x.IdBarbeiro == id);
-            if(barbeiros == null)
-            {
-                return NotFound("ID não encontrado");
-            }
-
-            return Ok(barbeiros);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult<Barbeiro>> Post(Barbeiro barbeiro)
-        {
-            await _context.Barbeiros.AddAsync(barbeiro);
-            await _context.SaveChangesAsync();
+            var barbeiro = await _barbeiroService.PegarBarbeiroAsync(id);
 
             return Ok(barbeiro);
         }
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult<Barbeiro>> Put(int id, Barbeiro barbeiro)
+        [HttpPost]
+        public async Task<ActionResult<Barbeiro>> Post(CriarBarbeiroRequest request)
         {
-            var barbeiros = await _context.Barbeiros.FirstOrDefaultAsync(x => x.IdBarbeiro == id);
-            if (barbeiros == null)
+            Barbeiro barbeiro = new Barbeiro
             {
-                return NotFound("ID não encontrado");
-            }
-            barbeiros.Contato = barbeiro.Contato;
-            barbeiros.Email = barbeiro.Email;
-            barbeiros.Experiencia = barbeiro.Experiencia;
-            barbeiros.IdBarbearia = barbeiro.IdBarbearia;
-            barbeiros.Nome = barbeiro.Nome;
+                Nome = request.Nome,
+                Email = request.Email,
+                Experiencia = request.Experiencia,
+                Contato = request.Contato,
+                IdBarbearia = request.IdBarbearia
+            };
+            await _barbeiroService.CriarBarbeiroAsync(barbeiro);
+            return Ok(barbeiro);
+        }
 
-            await _context.SaveChangesAsync();
-            return Ok(barbeiros);
+        [HttpPut("{id}")]
+        public async Task<ActionResult<Barbeiro>> Put(int id, AtualizarBarbeiroRequest request)
+        {
+            Barbeiro barbeiro = new Barbeiro
+            {
+                Nome = request.Nome,
+                Email = request.Email,
+                Experiencia = request.Experiencia,
+                Contato = request.Contato,
+                IdBarbearia = request.IdBarbearia
+            };
+            await _barbeiroService.AtualizarBarbeiroAsync(id,barbeiro);
+            return Ok(barbeiro);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var barbeiros = await _context.Barbeiros.FirstOrDefaultAsync(x => x.IdBarbeiro == id);
-            if (barbeiros == null)
-            {
-                return NotFound("ID não encontrado");
-            }
-
-            _context.Barbeiros.Remove(barbeiros);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            return Ok(await _barbeiroService.DeletarBarbeiroAsync(id));
         }
     }
 }

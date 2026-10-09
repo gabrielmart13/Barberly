@@ -1,7 +1,11 @@
 ﻿using Barberly.API.Data;
-using Barberly.API.Models;
+using Barberly.API.Domain.DTOs.BarbeariaDTO;
+using Barberly.API.Domain.Models;
+using Barberly.API.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.Json;
+using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace Barberly.API.Controllers
 {
@@ -9,71 +13,61 @@ namespace Barberly.API.Controllers
     [Route("api/[controller]")]
     public class BarbeariaController : ControllerBase
     {
-        private readonly DataContext _context;
-        public BarbeariaController (DataContext context)
+        private readonly IBarbeariaService _barbeariaService;
+        public BarbeariaController(IBarbeariaService barbeariaService)
         {
-            _context = context;
+            _barbeariaService = barbeariaService;
         }
 
         [HttpGet]
         public async Task<ActionResult<List<Barbearia>>> Get()
         {
-            var barbearias = await _context.Barbearias.Include(x => x.DonoBarbearia).ToListAsync();
+            var barbearias = await _barbeariaService.PegarBarbeariasAsync();
             return Ok(barbearias);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Barbearia>> Get(int id)
         {
-            var barbearias = await _context.Barbearias.Include(x=> x.DonoBarbearia).FirstOrDefaultAsync(x => x.IdBarbearia == id);
-            if(barbearias == null)
-            {
-                return NotFound("ID não encontrado");
-            }
-
-            return Ok(barbearias);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult<Barbearia>> Post(Barbearia barbearia)
-        {
-            await _context.Barbearias.AddAsync(barbearia);
-            await _context.SaveChangesAsync();
+            var barbearia = await _barbeariaService.PegarBarbeariaAsync(id);
 
             return Ok(barbearia);
         }
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult<Barbearia>> Put(int id, Barbearia barbearia)
+        [HttpPost]
+        public async Task<ActionResult<Barbearia>> Post(CriarBarbeariaRequest request)
         {
-            var barbearias = await _context.Barbearias.FirstOrDefaultAsync(x => x.IdBarbearia == id);
-            if (barbearias == null)
+            Barbearia barbearia = new Barbearia
             {
-                return NotFound("ID não encontrado");
-            }
+                Nome = request.Nome,
+                Endereco = request.Endereco,
+                Contato = request.Contato,
+                Descricao = request.Descricao,
+                IdDonoBarbearia = request.IdDonoBarbearia
+            };
+            await _barbeariaService.CriarBarbeariaAsync(barbearia);
+            return Ok(barbearia);
+        }
 
-            barbearias.Contato = barbearia.Contato;
-            barbearias.Descricao = barbearia.Descricao;
-            barbearias.Endereco = barbearia.Endereco;
-            barbearias.IdDonoBarbearia = barbearia.IdDonoBarbearia;
-            barbearias.Nome = barbearia.Nome;
-
-            await _context.SaveChangesAsync();
-            return Ok(barbearias);
+        [HttpPut("{id}")]
+        public async Task<ActionResult<Barbearia>> Put(int id, AtualizarBarbeariaRequest request)
+        {
+            Barbearia barbearia = new Barbearia
+            {
+                Nome = request.Nome,
+                Endereco = request.Endereco,
+                Contato = request.Contato,
+                Descricao = request.Descricao,
+                IdDonoBarbearia = request.IdDonoBarbearia
+            };
+            await _barbeariaService.AtualizarBarbeariaAsync(id,barbearia);
+            return Ok(barbearia);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var barbearias = await _context.Barbearias.FirstOrDefaultAsync(x => x.IdBarbearia == id);
-            if (barbearias == null)
-            {
-                return NotFound("ID não encontrado");
-            }
-            _context.Barbearias.Remove(barbearias);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            return Ok(await _barbeariaService.DeletarBarbeariaAsync(id));
         }
     }
 }

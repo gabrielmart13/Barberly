@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Barberly.API.Models
+namespace Barberly.API.Domain.Models
 {
     public class Usuario
     {

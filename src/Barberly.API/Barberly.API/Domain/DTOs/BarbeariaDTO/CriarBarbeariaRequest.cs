@@ -1,0 +1,11 @@
+﻿namespace Barberly.API.Domain.DTOs.BarbeariaDTO
+{
+    public class CriarBarbeariaRequest
+    {
+        public string Nome { get; set; } = string.Empty;
+        public string Endereco { get; set; } = string.Empty;
+        public string Contato { get; set; } = string.Empty;
+        public string Descricao { get; set; } = string.Empty;
+        public int IdDonoBarbearia { get; set; }
+    }
+}

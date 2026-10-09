@@ -1,7 +1,7 @@
-﻿using Barberly.API.Data;
-using Barberly.API.Models;
+﻿using Barberly.API.Domain.DTOs.HorarioFuncionamentoDTO;
+using Barberly.API.Domain.Models;
+using Barberly.API.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Barberly.API.Controllers
 {
@@ -9,69 +9,76 @@ namespace Barberly.API.Controllers
     [Route("api/[controller]")]
     public class HorarioFuncionamentoController : ControllerBase
     {
-        private readonly DataContext _context;
-        public HorarioFuncionamentoController(DataContext context)
+        private readonly IHorarioFuncionamentoService _horariofuncionamentoService;
+
+        public HorarioFuncionamentoController(
+            IHorarioFuncionamentoService horariofuncionamentoService)
         {
-            _context = context;
+            _horariofuncionamentoService = horariofuncionamentoService;
         }
 
         [HttpGet]
         public async Task<ActionResult<List<HorarioFuncionamento>>> Get()
         {
-            var horariosfuncionamento = await _context.HorarioFuncionamentos.ToListAsync();
+            var horariosfuncionamento =
+                await _horariofuncionamentoService.PegarTodosHorariosAsync();
+
             return Ok(horariosfuncionamento);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<HorarioFuncionamento>> Get(int id)
         {
-            var horariosfuncionamento = await _context.HorarioFuncionamentos.FirstOrDefaultAsync(x => x.IdHorario == id);
-            if(horariosfuncionamento == null)
-            {
-                return NotFound("ID não encontrado");
-            }
-            return Ok(horariosfuncionamento);
+            var horariofuncionamento =
+                await _horariofuncionamentoService.PegarHorarioAsync(id);
+
+            return Ok(horariofuncionamento);
         }
 
         [HttpPost]
-        public async Task<ActionResult<HorarioFuncionamento>> Post(HorarioFuncionamento horariofuncionamento)
+        public async Task<ActionResult<HorarioFuncionamento>> Post(
+            CriarHorarioRequest request)
         {
-            await _context.HorarioFuncionamentos.AddAsync(horariofuncionamento);
-            await _context.SaveChangesAsync();
+            HorarioFuncionamento horariofuncionamento = new HorarioFuncionamento
+            {
+                HoraAbertura = request.HoraAbertura,
+                HoraFechamento = request.HoraFechamento,
+                DiaSemana = request.DiaSemana,
+                IdBarbearia = request.IdBarbearia
+            };
+
+            await _horariofuncionamentoService.CriarHorarioAsync(
+                horariofuncionamento);
 
             return Ok(horariofuncionamento);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<HorarioFuncionamento>> Put(int id, HorarioFuncionamento horariofuncionamento)
+        public async Task<ActionResult<HorarioFuncionamento>> Put(
+            int id,
+            AtualizarHorarioRequest request)
         {
-            var horariosfuncionamento = await _context.HorarioFuncionamentos.FirstOrDefaultAsync(x => x.IdHorario == id);
-            if(horariosfuncionamento == null)
+            HorarioFuncionamento horariofuncionamento = new HorarioFuncionamento
             {
-                return NotFound("ID não encontrado");
-            }
+                HoraAbertura = request.HoraAbertura,
+                HoraFechamento = request.HoraFechamento,
+                DiaSemana = request.DiaSemana,
+                IdBarbearia = request.IdBarbearia
+            };
 
-            horariosfuncionamento.HoraAbertura = horariofuncionamento.HoraAbertura;
-            horariosfuncionamento.HoraFechamento = horariofuncionamento.HoraFechamento;
-            horariosfuncionamento.DiaSemana = horariofuncionamento.DiaSemana;
-            horariosfuncionamento.IdBarbearia = horariofuncionamento.IdBarbearia;
+            await _horariofuncionamentoService.AtualizarHorarioAsync(
+                id,
+                horariofuncionamento);
 
-            await _context.SaveChangesAsync();
-            return Ok(horariosfuncionamento);
+            return Ok(horariofuncionamento);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            var horariosfuncionamento = await _context.HorarioFuncionamentos.FirstOrDefaultAsync(x => x.IdHorario == id);
-            if(horariosfuncionamento == null)
-            {
-                return NotFound("ID não encontrado");
-            }
-
-            _context.HorarioFuncionamentos.Remove(horariosfuncionamento);
-            _context.SaveChangesAsync();
-            return NoContent();
+            return Ok(
+                await _horariofuncionamentoService.DeletarHorarioAsync(id)
+            );
         }
     }
 }

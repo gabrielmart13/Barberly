@@ -1,7 +1,7 @@
-﻿using Barberly.API.Data;
-using Barberly.API.Models;
+﻿using Barberly.API.Domain.DTOs.ServicoDTO;
+using Barberly.API.Domain.Models;
+using Barberly.API.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Barberly.API.Controllers
 {
@@ -9,70 +9,71 @@ namespace Barberly.API.Controllers
     [Route("api/[controller]")]
     public class ServicoController : ControllerBase
     {
-        private readonly DataContext _context;
-        public ServicoController(DataContext context)
+        private readonly IServicoService _servicoService;
+
+        public ServicoController(IServicoService servicoService)
         {
-            _context = context;
+            _servicoService = servicoService;
         }
 
         [HttpGet]
         public async Task<ActionResult<List<Servico>>> Get()
         {
-            var servicos = await _context.Servicos.ToListAsync();
+            var servicos = await _servicoService.PegarTodosServicosAsync();
+
             return Ok(servicos);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Servico>> Get(int id)
         {
-            var servicos = await _context.Servicos.FirstOrDefaultAsync(x => x.IdServico == id);
-            if(servicos == null)
-            {
-                return NotFound("ID não encontrado");
-            }
-            return Ok(servicos);
+            var servico = await _servicoService.PegarServicoAsync(id);
+
+            return Ok(servico);
         }
 
         [HttpPost]
-        public async Task<ActionResult<Servico>> Post(Servico servico)
+        public async Task<ActionResult<Servico>> Post(CriarServicoRequest request)
         {
-            await _context.Servicos.AddAsync(servico);
-            await _context.SaveChangesAsync();
+            Servico servico = new Servico
+            {
+                IdBarbearia = request.IdBarbearia,
+                IdCategoria = request.IdCategoria,
+                Valor = request.Valor,
+                Nome = request.Nome,
+                TempoEstimado = request.TempoEstimado
+            };
+
+            await _servicoService.CriarServicoAsync(servico);
 
             return Ok(servico);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Servico>> Put(int id, Servico servico)
+        public async Task<ActionResult<Servico>> Put(
+            int id,
+            AtualizarServicoRequest request)
         {
-            var servicos = await _context.Servicos.FirstOrDefaultAsync(x => x.IdServico == id);
-            if(servicos == null)
+            Servico servico = new Servico
             {
-                return NotFound("ID não encontrado");
-            }
-            servicos.IdBarbearia = servico.IdBarbearia;
-            servicos.IdCategoria = servico.IdCategoria;
-            servicos.Valor = servico.Valor;
-            servicos.Nome = servico.Nome;
-            servicos.TempoEstimado = servico.TempoEstimado;
+                IdBarbearia = request.IdBarbearia,
+                IdCategoria = request.IdCategoria,
+                Valor = request.Valor,
+                Nome = request.Nome,
+                TempoEstimado = request.TempoEstimado
+            };
 
-            await _context.SaveChangesAsync();
-            return Ok(servicos);
+            await _servicoService.AtualizarServicoAsync(id, servico);
+
+            return Ok(servico);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            var servicos = await _context.Servicos.FirstOrDefaultAsync(x => x.IdServico == id);
-            if(servicos == null)
-            {
-                return NotFound("ID não encontrado");
-            }
-
-            _context.Servicos.Remove(servicos);
-            await _context.SaveChangesAsync();
-            return NoContent();
-
+            return Ok(
+                await _servicoService.DeletarServicoAsync(id)
+            );
         }
     }
 }
