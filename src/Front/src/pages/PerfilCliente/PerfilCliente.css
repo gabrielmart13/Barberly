@@ -1,0 +1,3 @@
+@import '../../styles/pages.css';
+.profile-info-list{display:flex;flex-direction:column}.profile-info-list>div{display:grid;grid-template-columns:24px minmax(110px,.7fr) minmax(0,1.5fr);align-items:center;gap:12px;padding:16px 0;border-bottom:1px solid var(--line);font-size:12px}.profile-info-list>div:last-child{border-bottom:0}.profile-info-list svg{color:var(--muted)}.profile-info-list span{color:var(--muted)}.profile-info-list strong{overflow-wrap:anywhere;font-weight:500}.profile-hero .btn{flex-shrink:0}
+@media(max-width:700px){.profile-info-list>div{grid-template-columns:21px 1fr;gap:9px}.profile-info-list strong{grid-column:2}.profile-hero{flex-wrap:wrap}.profile-hero .btn{width:100%}}

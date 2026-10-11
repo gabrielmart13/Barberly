@@ -23,7 +23,7 @@ namespace Barberly.API.Controllers
         [HttpGet]
         public async Task<ActionResult<List<CategoriaServico>>> Get()
         {
-            var categoriaservicos = _categoriaservicoService.PegarTodasCategoriasAsync();
+            var categoriaservicos = await _categoriaservicoService.PegarTodasCategoriasAsync();
             return Ok(categoriaservicos);
         }
 
@@ -56,7 +56,7 @@ namespace Barberly.API.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            return Ok(_categoriaservicoService.DeletarCategoriaAsync(id));
+            return Ok(await _categoriaservicoService.DeletarCategoriaAsync(id));
         }
     }
 }

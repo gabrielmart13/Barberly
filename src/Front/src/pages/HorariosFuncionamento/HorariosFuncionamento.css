@@ -1,0 +1,2 @@
+@import '../../styles/pages.css';
+.hours-top{align-items:start}.hours-icon{width:42px;height:42px;display:grid;place-items:center;flex-shrink:0;border-radius:12px;background:#20211d;color:var(--gold)}.hours-top .field+.field{margin-top:15px}

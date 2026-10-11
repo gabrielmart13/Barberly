@@ -93,6 +93,20 @@ if (Encoding.UTF8.GetByteCount(jwtKey) < 32)
     );
 }
 
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("FrontEnd", policy =>
+    {
+        policy.WithOrigins(
+            "http://localhost:5173",
+            "https://localhost:5173"
+            )
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
 // Configura a autenticação por Bearer token.
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -130,6 +144,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("FrontEnd");
 
 app.UseMiddleware<ExceptionMiddleware>();
 

@@ -1,0 +1,2 @@
+@import '../../styles/pages.css';
+.preferences-list{display:flex;flex-direction:column}.preference-row{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:16px 0;border-bottom:1px solid var(--line);cursor:pointer}.preference-row:last-child{border-bottom:0}.preference-row strong,.preference-row small{display:block}.preference-row strong{font-size:13px}.preference-row small{font-size:11px;line-height:1.5;color:var(--muted);margin-top:4px}.preference-row input{width:42px;height:22px;accent-color:var(--gold);flex-shrink:0}

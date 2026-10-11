@@ -1,0 +1,2 @@
+@import '../../styles/pages.css';
+.category-page-grid{align-items:start}.category-symbol{width:42px;height:42px;border-radius:12px;background:#23231f;color:var(--gold);display:grid;place-items:center;flex-shrink:0}.category-page-grid .data-row__main p{max-width:260px}
