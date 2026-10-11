@@ -7,9 +7,9 @@ namespace Barberly.API.Domain.Models
     {
         [Key]
         public int IdBarbearia { get; set; }
-        public string Nome { get; set; }
-        public string Endereco { get; set; }
-        public string Contato { get; set; }
+        public string Nome { get; set; } = string.Empty;
+        public string Endereco { get; set; } = string.Empty;
+        public string Contato { get; set; } = string.Empty;
         public string? Descricao { get; set; }
 
         public int IdDonoBarbearia { get; set; }

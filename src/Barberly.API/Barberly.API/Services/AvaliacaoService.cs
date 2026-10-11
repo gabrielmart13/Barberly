@@ -1,5 +1,7 @@
 ﻿using Barberly.API.Data.Repositories.Interfaces;
+using Barberly.API.Domain.DTOs.AvaliacaoDTO;
 using Barberly.API.Domain.Models;
+using Barberly.API.Exceptions;
 using Barberly.API.Services.Interfaces;
 
 namespace Barberly.API.Services
@@ -12,34 +14,51 @@ namespace Barberly.API.Services
             _geralRepo = geralRepo;
         }
 
-        public async Task<Avaliacao> AtualizarAvaliacaoAsync(int id, Avaliacao avaliacao)
+        public async Task<Avaliacao> AtualizarAvaliacaoAsync(int id, AtualizarAvaliacaoRequest request)
         {
+            if (request == null)
+            {
+                throw new Barberly.API.Exceptions.ValidationException("A avaliação não pode ser nula.");
+            }
+
             var avaliacaoAtt = await _geralRepo.PegarPorId<Avaliacao>(id);
-            if(avaliacaoAtt == null)
+            if (avaliacaoAtt == null)
             {
-                throw new ArgumentException($"A avaliação não foi encontrada.");
+                throw new NotFoundException("A avaliação não foi encontrada.");
             }
 
-            if (string.IsNullOrWhiteSpace(avaliacao.Comentario)|| avaliacao.Nota == null)
+            if (string.IsNullOrWhiteSpace(request.Comentario) || request.Nota < 1 || request.Nota > 10)
             {
-                throw new ArgumentException("O comentário e a nota não podem ser nulos ou vazios.", nameof(avaliacao.Comentario));
+                throw new Barberly.API.Exceptions.ValidationException("O comentário é obrigatório e a nota deve estar entre 1 e 10.");
             }
 
-            avaliacaoAtt.Nota = avaliacao.Nota;
-            avaliacaoAtt.Comentario = avaliacao.Comentario;
+            avaliacaoAtt.Nota = request.Nota;
+            avaliacaoAtt.Comentario = request.Comentario;
 
             await _geralRepo.Atualizar<Avaliacao>(avaliacaoAtt);
             return avaliacaoAtt;
         }
 
-        public async Task<Avaliacao> CriarAvaliacaoAsync(Avaliacao avaliacao)
+        public async Task<Avaliacao> CriarAvaliacaoAsync(CriarAvaliacaoRequest request)
         {
-
-            if (string.IsNullOrWhiteSpace(avaliacao.Comentario) || avaliacao.Nota == null || avaliacao.IdAgendamento == null)
-            { 
-                throw new ArgumentException("O comentário e a nota e o ID do agendamento não podem ser nulos ou vazios.");
+            if (request == null)
+            {
+                throw new Barberly.API.Exceptions.ValidationException("Os dados da avaliação não podem ser nulos.");
             }
-            avaliacao.DataAvaliacao = DateTime.Now;
+
+            if (string.IsNullOrWhiteSpace(request.Comentario) || request.Nota < 1 || request.Nota > 10 || request.IdUsuario <= 0 || request.IdAgendamento <= 0)
+            {
+                throw new Barberly.API.Exceptions.ValidationException("O comentário é obrigatório, a nota deve estar entre 1 e 10 e os IDs devem ser válidos.");
+            }
+
+            var avaliacao = new Avaliacao
+            {
+                Nota = request.Nota,
+                Comentario = request.Comentario,
+                IdUsuario = request.IdUsuario,
+                IdAgendamento = request.IdAgendamento,
+                DataAvaliacao = DateTime.Now
+            };
 
             await _geralRepo.Adicionar<Avaliacao>(avaliacao);
             return avaliacao;
@@ -50,7 +69,7 @@ namespace Barberly.API.Services
             var avaliacao = await _geralRepo.PegarPorId<Avaliacao>(id);
             if (avaliacao == null)
             {
-                throw new ArgumentException($"A avaliação não foi encontrada.");
+                throw new NotFoundException("A avaliação não foi encontrada.");
             }
             await _geralRepo.Remover<Avaliacao>(avaliacao);
             return avaliacao;
@@ -61,7 +80,7 @@ namespace Barberly.API.Services
             var avaliacao = await _geralRepo.PegarPorId<Avaliacao>(id);
             if (avaliacao == null)
             {
-                throw new ArgumentException($"A avaliação não foi encontrada.");
+                throw new NotFoundException("A avaliação não foi encontrada.");
             }
             return avaliacao;
         }

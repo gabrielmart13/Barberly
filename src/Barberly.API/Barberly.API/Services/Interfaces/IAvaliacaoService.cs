@@ -1,13 +1,14 @@
-﻿using Barberly.API.Domain.Models;
+﻿using Barberly.API.Domain.DTOs.AvaliacaoDTO;
+using Barberly.API.Domain.Models;
 
 namespace Barberly.API.Services.Interfaces
 {
     public interface IAvaliacaoService
     {
-        public Task<Avaliacao> CriarAvaliacaoAsync(Avaliacao avaliacao);
+        public Task<Avaliacao> CriarAvaliacaoAsync(CriarAvaliacaoRequest avaliacao);
         public Task<Avaliacao?> PegarAvaliacaoAsync(int id);
         public Task<List<Avaliacao>> PegarAvaliacoesAsync();
         public Task<Avaliacao> DeletarAvaliacaoAsync(int id);
-        public Task<Avaliacao> AtualizarAvaliacaoAsync(int id, Avaliacao avaliacao);
+        public Task<Avaliacao> AtualizarAvaliacaoAsync(int id, AtualizarAvaliacaoRequest request);
     }
 }

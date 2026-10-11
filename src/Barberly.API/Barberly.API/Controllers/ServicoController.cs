@@ -1,6 +1,7 @@
 ﻿using Barberly.API.Domain.DTOs.ServicoDTO;
 using Barberly.API.Domain.Models;
 using Barberly.API.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Barberly.API.Controllers
@@ -16,64 +17,48 @@ namespace Barberly.API.Controllers
             _servicoService = servicoService;
         }
 
+        // Consulta pública de todos os serviços.
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<List<Servico>>> Get()
         {
             var servicos = await _servicoService.PegarTodosServicosAsync();
-
             return Ok(servicos);
         }
 
+        // Consulta pública de um serviço específico.
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult<Servico>> Get(int id)
         {
             var servico = await _servicoService.PegarServicoAsync(id);
-
             return Ok(servico);
         }
 
+        // Somente donos autenticados podem cadastrar serviços.
+        [Authorize(Roles = "DonoBarbearia")]
         [HttpPost]
         public async Task<ActionResult<Servico>> Post(CriarServicoRequest request)
         {
-            Servico servico = new Servico
-            {
-                IdBarbearia = request.IdBarbearia,
-                IdCategoria = request.IdCategoria,
-                Valor = request.Valor,
-                Nome = request.Nome,
-                TempoEstimado = request.TempoEstimado
-            };
-
-            await _servicoService.CriarServicoAsync(servico);
-
+            var servico = await _servicoService.CriarServicoAsync(request);
             return Ok(servico);
         }
 
+        // Somente donos autenticados podem atualizar serviços.
+        [Authorize(Roles = "DonoBarbearia")]
         [HttpPut("{id}")]
-        public async Task<ActionResult<Servico>> Put(
-            int id,
-            AtualizarServicoRequest request)
+        public async Task<ActionResult<Servico>> Put(int id, AtualizarServicoRequest request)
         {
-            Servico servico = new Servico
-            {
-                IdBarbearia = request.IdBarbearia,
-                IdCategoria = request.IdCategoria,
-                Valor = request.Valor,
-                Nome = request.Nome,
-                TempoEstimado = request.TempoEstimado
-            };
-
-            await _servicoService.AtualizarServicoAsync(id, servico);
-
+            var servico = await _servicoService.AtualizarServicoAsync(id, request);
             return Ok(servico);
         }
 
+        // Somente donos autenticados podem excluir serviços.
+        [Authorize(Roles = "DonoBarbearia")]
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            return Ok(
-                await _servicoService.DeletarServicoAsync(id)
-            );
+            return Ok(await _servicoService.DeletarServicoAsync(id));
         }
     }
 }

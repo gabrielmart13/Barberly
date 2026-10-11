@@ -1,5 +1,7 @@
 ﻿using Barberly.API.Data.Repositories.Interfaces;
+using Barberly.API.Domain.DTOs.CategoriaServicoDTO;
 using Barberly.API.Domain.Models;
+using Barberly.API.Exceptions;
 using Barberly.API.Services.Interfaces;
 
 namespace Barberly.API.Services
@@ -12,34 +14,51 @@ namespace Barberly.API.Services
             _geralRepo = geralRepo;
         }
 
-        public async Task<CategoriaServico> AtualizarCategoriaAsync(int id, CategoriaServico categoria)
+        public async Task<CategoriaServico> AtualizarCategoriaAsync(int id, AtualizarCategoriaRequest request)
         {
-            if (categoria == null)
+            if (request == null)
             {
-                throw new Exception("Categoria não encontrada.");
+                throw new Barberly.API.Exceptions.ValidationException("A categoria não pode ser nula.");
             }
+
             var categoriaAtt = await _geralRepo.PegarPorId<CategoriaServico>(id);
-            if (string.IsNullOrWhiteSpace(categoria.Nome) || string.IsNullOrWhiteSpace(categoria.Descricao))
+            if (categoriaAtt == null)
             {
-                throw new Exception("O nome e a descrição da categoria não podem ser nulos ou vazios.");
+                throw new NotFoundException("Categoria não encontrada.");
             }
-            categoriaAtt.Nome = categoria.Nome;
-            categoriaAtt.Descricao = categoria.Descricao;
+
+            if (string.IsNullOrWhiteSpace(request.Nome) || string.IsNullOrWhiteSpace(request.Descricao))
+            {
+                throw new Barberly.API.Exceptions.ValidationException("O nome e a descrição da categoria não podem ser nulos ou vazios.");
+            }
+
+            categoriaAtt.Nome = request.Nome;
+            categoriaAtt.Descricao = request.Descricao;
 
             await _geralRepo.Atualizar(categoriaAtt);
             return categoriaAtt;
-
         }
 
-        public async Task<CategoriaServico> CriarCategoriaAsync(CategoriaServico categoria)
+        public async Task<CategoriaServico> CriarCategoriaAsync(CriarCategoriaRequest request)
         {
-            if (string.IsNullOrWhiteSpace(categoria.Nome) || string.IsNullOrWhiteSpace(categoria.Descricao))
+            if (request == null)
             {
-                throw new Exception("O nome e a descrição da categoria não podem ser nulos ou vazios.");
+                throw new Barberly.API.Exceptions.ValidationException("Os dados da categoria não podem ser nulos.");
             }
+
+            if (string.IsNullOrWhiteSpace(request.Nome) || string.IsNullOrWhiteSpace(request.Descricao))
+            {
+                throw new Barberly.API.Exceptions.ValidationException("O nome e a descrição da categoria não podem ser nulos ou vazios.");
+            }
+
+            var categoria = new CategoriaServico
+            {
+                Nome = request.Nome,
+                Descricao = request.Descricao
+            };
+
             await _geralRepo.Adicionar(categoria);
             return categoria;
-
         }
 
         public async Task<CategoriaServico> DeletarCategoriaAsync(int id)
@@ -47,7 +66,7 @@ namespace Barberly.API.Services
             var categoria = await _geralRepo.PegarPorId<CategoriaServico>(id);
             if (categoria == null)
             {
-                throw new Exception("Categoria não encontrada.");
+                throw new NotFoundException("Categoria não encontrada.");
             }
             await _geralRepo.Remover(categoria);
             return categoria;
@@ -58,7 +77,7 @@ namespace Barberly.API.Services
             var categoria = await _geralRepo.PegarPorId<CategoriaServico>(id);
             if (categoria == null)
             {
-                throw new Exception("Categoria não encontrada.");
+                throw new NotFoundException("Categoria não encontrada.");
             }
             return categoria;
         }

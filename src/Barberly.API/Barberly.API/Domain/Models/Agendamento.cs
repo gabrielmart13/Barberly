@@ -8,7 +8,7 @@ namespace Barberly.API.Domain.Models
         [Key]
         public int IdAgendamento { get; set; }
         public DateTime DataHora { get; set; }
-        public string Status { get; set; }
+        public string Status { get; set; } = string.Empty;
         public int IdUsuario { get; set; }
 
         [ForeignKey(nameof(IdUsuario))]

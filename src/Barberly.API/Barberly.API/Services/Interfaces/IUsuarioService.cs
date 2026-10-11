@@ -1,4 +1,5 @@
-﻿using Barberly.API.Domain.Models;
+﻿using Barberly.API.Domain.DTOs.UsuarioDTO;
+using Barberly.API.Domain.Models;
 
 namespace Barberly.API.Services.Interfaces
 {
@@ -6,9 +7,7 @@ namespace Barberly.API.Services.Interfaces
     {
         public Task<List<Usuario>> PegarTodosUsuariosAsync();
         public Task<Usuario> PegarUsuarioAsync(int id);
-        public Task<Usuario> CriarUsuarioAsync(Usuario usuario);
-        public Task<Usuario> AtualizarUsuarioAsync(int id, Usuario usuario);
         public Task<Usuario> DeletarUsuarioAsync(int id);
-
+        public Task<Usuario> AtualizarUsuarioAsync(int id, AtualizarUsuarioRequest request);
     }
 }

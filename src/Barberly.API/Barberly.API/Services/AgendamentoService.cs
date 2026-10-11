@@ -1,7 +1,10 @@
 ﻿using Barberly.API.Data.Repositories;
 using Barberly.API.Data.Repositories.Interfaces;
+using Barberly.API.Domain.DTOs.AgendamentoDTO;
 using Barberly.API.Domain.Models;
+using Barberly.API.Exceptions;
 using Barberly.API.Services.Interfaces;
+using System.ComponentModel.DataAnnotations;
 
 namespace Barberly.API.Services
 {
@@ -13,11 +16,25 @@ namespace Barberly.API.Services
             _geralRepo = geralRepo;
         }
 
-        public async Task<Agendamento> CriarAgendamentoAsync(Agendamento agendamento)
+        public async Task<Agendamento> CriarAgendamentoAsync(CriarAgendamentoRequest request)
         {
-            if(string.IsNullOrWhiteSpace(agendamento.Status) || agendamento.IdBarbearia == 0 || agendamento.IdUsuario == 0 || agendamento.DataHora == null || agendamento.IdServico == 0)
+            if(request == null)
             {
-                throw new ArgumentException(" Voce deve preencher todos os campos obrigatórios.");
+                throw new Barberly.API.Exceptions.ValidationException("O agendamento não pode ser nulo");
+            }
+            var agendamento = new Agendamento
+            {
+                DataHora = request.DataHora,
+                Status = request.Status,
+                IdUsuario = request.IdUsuario,
+                IdServico = request.IdServico,
+                IdBarbearia = request.IdBarbearia,
+                IdBarbeiro = request.IdBarbeiro
+            };
+
+            if(string.IsNullOrWhiteSpace(agendamento.Status) || agendamento.IdBarbearia <= 0 || agendamento.IdUsuario <= 0 || agendamento.DataHora <= DateTime.Now || agendamento.IdServico <= 0)
+            {
+                throw new Barberly.API.Exceptions.ValidationException(" Voce deve preencher todos os campos obrigatórios.");
             }
             await _geralRepo.Adicionar<Agendamento>(agendamento);
             return agendamento;
@@ -28,7 +45,7 @@ namespace Barberly.API.Services
             var agendamento = await _geralRepo.PegarPorId<Agendamento>(id);
             if (agendamento == null)
             {
-                throw new ArgumentException("Agendamento não encontrado.");
+                throw new NotFoundException("Agendamento não encontrado.");
             }
             await _geralRepo.Remover<Agendamento>(agendamento);
             return agendamento;
@@ -39,7 +56,7 @@ namespace Barberly.API.Services
             var agendamento = await _geralRepo.PegarPorId<Agendamento>(id);
             if(agendamento == null)
             {
-                throw new ArgumentException("Agendamento não encontrado.");
+                throw new NotFoundException("Agendamento não encontrado.");
             }
             return agendamento;
         }

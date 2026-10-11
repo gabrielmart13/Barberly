@@ -4,7 +4,7 @@ using MySql.EntityFrameworkCore.Metadata;
 
 #nullable disable
 
-namespace Barberly.API.Data.Migrations
+namespace Barberly.API.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration

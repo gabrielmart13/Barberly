@@ -3,23 +3,26 @@ using System;
 using Barberly.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Barberly.API.Data.Migrations
+namespace Barberly.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20261009145421_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "10.0.12")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("Barberly.API.Models.Agendamento", b =>
+            modelBuilder.Entity("Barberly.API.Domain.Models.Agendamento", b =>
                 {
                     b.Property<int>("IdAgendamento")
                         .ValueGeneratedOnAdd()
@@ -57,7 +60,7 @@ namespace Barberly.API.Data.Migrations
                     b.ToTable("agendamento", (string)null);
                 });
 
-            modelBuilder.Entity("Barberly.API.Models.Avaliacao", b =>
+            modelBuilder.Entity("Barberly.API.Domain.Models.Avaliacao", b =>
                 {
                     b.Property<int>("IdAvaliacao")
                         .ValueGeneratedOnAdd()
@@ -87,7 +90,7 @@ namespace Barberly.API.Data.Migrations
                     b.ToTable("avaliacao", (string)null);
                 });
 
-            modelBuilder.Entity("Barberly.API.Models.Barbearia", b =>
+            modelBuilder.Entity("Barberly.API.Domain.Models.Barbearia", b =>
                 {
                     b.Property<int>("IdBarbearia")
                         .ValueGeneratedOnAdd()
@@ -118,7 +121,7 @@ namespace Barberly.API.Data.Migrations
                     b.ToTable("barbearia", (string)null);
                 });
 
-            modelBuilder.Entity("Barberly.API.Models.Barbeiro", b =>
+            modelBuilder.Entity("Barberly.API.Domain.Models.Barbeiro", b =>
                 {
                     b.Property<int>("IdBarbeiro")
                         .ValueGeneratedOnAdd()
@@ -149,7 +152,7 @@ namespace Barberly.API.Data.Migrations
                     b.ToTable("barbeiro", (string)null);
                 });
 
-            modelBuilder.Entity("Barberly.API.Models.CategoriaServico", b =>
+            modelBuilder.Entity("Barberly.API.Domain.Models.CategoriaServico", b =>
                 {
                     b.Property<int>("IdCategoria")
                         .ValueGeneratedOnAdd()
@@ -167,7 +170,7 @@ namespace Barberly.API.Data.Migrations
                     b.ToTable("categoriaservico", (string)null);
                 });
 
-            modelBuilder.Entity("Barberly.API.Models.DonoBarbearia", b =>
+            modelBuilder.Entity("Barberly.API.Domain.Models.DonoBarbearia", b =>
                 {
                     b.Property<int>("IdDonoBarbearia")
                         .ValueGeneratedOnAdd()
@@ -194,7 +197,7 @@ namespace Barberly.API.Data.Migrations
                     b.ToTable("donobarbearia", (string)null);
                 });
 
-            modelBuilder.Entity("Barberly.API.Models.HorarioFuncionamento", b =>
+            modelBuilder.Entity("Barberly.API.Domain.Models.HorarioFuncionamento", b =>
                 {
                     b.Property<int>("IdHorario")
                         .ValueGeneratedOnAdd()
@@ -220,7 +223,7 @@ namespace Barberly.API.Data.Migrations
                     b.ToTable("horariofuncionamento", (string)null);
                 });
 
-            modelBuilder.Entity("Barberly.API.Models.Servico", b =>
+            modelBuilder.Entity("Barberly.API.Domain.Models.Servico", b =>
                 {
                     b.Property<int>("IdServico")
                         .ValueGeneratedOnAdd()
@@ -251,7 +254,7 @@ namespace Barberly.API.Data.Migrations
                     b.ToTable("servico", (string)null);
                 });
 
-            modelBuilder.Entity("Barberly.API.Models.Usuario", b =>
+            modelBuilder.Entity("Barberly.API.Domain.Models.Usuario", b =>
                 {
                     b.Property<int>("IdUsuario")
                         .ValueGeneratedOnAdd()
@@ -278,27 +281,27 @@ namespace Barberly.API.Data.Migrations
                     b.ToTable("usuario", (string)null);
                 });
 
-            modelBuilder.Entity("Barberly.API.Models.Agendamento", b =>
+            modelBuilder.Entity("Barberly.API.Domain.Models.Agendamento", b =>
                 {
-                    b.HasOne("Barberly.API.Models.Barbearia", "Barbearia")
+                    b.HasOne("Barberly.API.Domain.Models.Barbearia", "Barbearia")
                         .WithMany()
                         .HasForeignKey("IdBarbearia")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Barberly.API.Models.Barbeiro", "Barbeiro")
+                    b.HasOne("Barberly.API.Domain.Models.Barbeiro", "Barbeiro")
                         .WithMany()
                         .HasForeignKey("IdBarbeiro")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Barberly.API.Models.Servico", "Servico")
+                    b.HasOne("Barberly.API.Domain.Models.Servico", "Servico")
                         .WithMany()
                         .HasForeignKey("IdServico")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Barberly.API.Models.Usuario", "Usuario")
+                    b.HasOne("Barberly.API.Domain.Models.Usuario", "Usuario")
                         .WithMany()
                         .HasForeignKey("IdUsuario")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -313,15 +316,15 @@ namespace Barberly.API.Data.Migrations
                     b.Navigation("Usuario");
                 });
 
-            modelBuilder.Entity("Barberly.API.Models.Avaliacao", b =>
+            modelBuilder.Entity("Barberly.API.Domain.Models.Avaliacao", b =>
                 {
-                    b.HasOne("Barberly.API.Models.Agendamento", "Agendamento")
+                    b.HasOne("Barberly.API.Domain.Models.Agendamento", "Agendamento")
                         .WithMany()
                         .HasForeignKey("IdAgendamento")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Barberly.API.Models.Usuario", "Usuario")
+                    b.HasOne("Barberly.API.Domain.Models.Usuario", "Usuario")
                         .WithMany()
                         .HasForeignKey("IdUsuario")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -332,9 +335,9 @@ namespace Barberly.API.Data.Migrations
                     b.Navigation("Usuario");
                 });
 
-            modelBuilder.Entity("Barberly.API.Models.Barbearia", b =>
+            modelBuilder.Entity("Barberly.API.Domain.Models.Barbearia", b =>
                 {
-                    b.HasOne("Barberly.API.Models.DonoBarbearia", "DonoBarbearia")
+                    b.HasOne("Barberly.API.Domain.Models.DonoBarbearia", "DonoBarbearia")
                         .WithMany()
                         .HasForeignKey("IdDonoBarbearia")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -343,9 +346,9 @@ namespace Barberly.API.Data.Migrations
                     b.Navigation("DonoBarbearia");
                 });
 
-            modelBuilder.Entity("Barberly.API.Models.Barbeiro", b =>
+            modelBuilder.Entity("Barberly.API.Domain.Models.Barbeiro", b =>
                 {
-                    b.HasOne("Barberly.API.Models.Barbearia", "Barbearia")
+                    b.HasOne("Barberly.API.Domain.Models.Barbearia", "Barbearia")
                         .WithMany()
                         .HasForeignKey("IdBarbearia")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -354,9 +357,9 @@ namespace Barberly.API.Data.Migrations
                     b.Navigation("Barbearia");
                 });
 
-            modelBuilder.Entity("Barberly.API.Models.HorarioFuncionamento", b =>
+            modelBuilder.Entity("Barberly.API.Domain.Models.HorarioFuncionamento", b =>
                 {
-                    b.HasOne("Barberly.API.Models.Barbearia", "Barbearia")
+                    b.HasOne("Barberly.API.Domain.Models.Barbearia", "Barbearia")
                         .WithMany()
                         .HasForeignKey("IdBarbearia")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -365,15 +368,15 @@ namespace Barberly.API.Data.Migrations
                     b.Navigation("Barbearia");
                 });
 
-            modelBuilder.Entity("Barberly.API.Models.Servico", b =>
+            modelBuilder.Entity("Barberly.API.Domain.Models.Servico", b =>
                 {
-                    b.HasOne("Barberly.API.Models.Barbearia", "Barbearia")
+                    b.HasOne("Barberly.API.Domain.Models.Barbearia", "Barbearia")
                         .WithMany()
                         .HasForeignKey("IdBarbearia")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Barberly.API.Models.CategoriaServico", "Categoria")
+                    b.HasOne("Barberly.API.Domain.Models.CategoriaServico", "Categoria")
                         .WithMany()
                         .HasForeignKey("IdCategoria")
                         .OnDelete(DeleteBehavior.Cascade)

@@ -1,11 +1,10 @@
-﻿using Barberly.API.Data;
+﻿
 using Barberly.API.Domain.DTOs.BarbeariaDTO;
 using Barberly.API.Domain.Models;
 using Barberly.API.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.Json;
-using Org.BouncyCastle.Asn1.Ocsp;
+
 
 namespace Barberly.API.Controllers
 {
@@ -19,6 +18,7 @@ namespace Barberly.API.Controllers
             _barbeariaService = barbeariaService;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<List<Barbearia>>> Get()
         {
@@ -26,6 +26,7 @@ namespace Barberly.API.Controllers
             return Ok(barbearias);
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult<Barbearia>> Get(int id)
         {
@@ -34,36 +35,23 @@ namespace Barberly.API.Controllers
             return Ok(barbearia);
         }
 
+        [Authorize(Roles = "DonoBarbearia")]
         [HttpPost]
         public async Task<ActionResult<Barbearia>> Post(CriarBarbeariaRequest request)
         {
-            Barbearia barbearia = new Barbearia
-            {
-                Nome = request.Nome,
-                Endereco = request.Endereco,
-                Contato = request.Contato,
-                Descricao = request.Descricao,
-                IdDonoBarbearia = request.IdDonoBarbearia
-            };
-            await _barbeariaService.CriarBarbeariaAsync(barbearia);
+            var barbearia = await _barbeariaService.CriarBarbeariaAsync(request);
             return Ok(barbearia);
         }
 
+        [Authorize(Roles = "DonoBarbearia")]
         [HttpPut("{id}")]
         public async Task<ActionResult<Barbearia>> Put(int id, AtualizarBarbeariaRequest request)
         {
-            Barbearia barbearia = new Barbearia
-            {
-                Nome = request.Nome,
-                Endereco = request.Endereco,
-                Contato = request.Contato,
-                Descricao = request.Descricao,
-                IdDonoBarbearia = request.IdDonoBarbearia
-            };
-            await _barbeariaService.AtualizarBarbeariaAsync(id,barbearia);
+           var barbearia = await _barbeariaService.AtualizarBarbeariaAsync(id,request);
             return Ok(barbearia);
         }
 
+        [Authorize(Roles = "DonoBarbearia")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

@@ -7,7 +7,7 @@ namespace Barberly.API.Domain.Models
     {
         [Key]
         public int IdHorario { get; set; }
-        public string DiaSemana { get; set; }
+        public string DiaSemana { get; set; } = string.Empty;
         public TimeSpan HoraAbertura { get; set; } 
         public TimeSpan HoraFechamento { get; set; }
 

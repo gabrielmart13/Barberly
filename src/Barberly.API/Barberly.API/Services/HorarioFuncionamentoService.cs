@@ -1,5 +1,7 @@
 ﻿using Barberly.API.Data.Repositories.Interfaces;
+using Barberly.API.Domain.DTOs.HorarioFuncionamentoDTO;
 using Barberly.API.Domain.Models;
+using Barberly.API.Exceptions;
 using Barberly.API.Services.Interfaces;
 
 namespace Barberly.API.Services
@@ -13,16 +15,37 @@ namespace Barberly.API.Services
             _geralRepo = geralRepo;
         }
 
-        public async Task<HorarioFuncionamento> CriarHorarioAsync(HorarioFuncionamento horarioFuncionamento)
+        public async Task<HorarioFuncionamento> CriarHorarioAsync(CriarHorarioRequest request)
         {
-            if (horarioFuncionamento.IdBarbearia == null || horarioFuncionamento.HoraAbertura == null || horarioFuncionamento.HoraFechamento == null)
+            if (request == null)
             {
-                throw new Exception("Horário de funcionamento e Barbearia não encontrado.");
+                throw new Barberly.API.Exceptions.ValidationException("Horário de funcionamento nulo.");
             }
 
-            await _geralRepo.Adicionar<HorarioFuncionamento>(horarioFuncionamento);
+            if (request.IdBarbearia <= 0)
+            {
+                throw new Barberly.API.Exceptions.ValidationException("O ID da barbearia deve ser válido.");
+            }
 
-            return horarioFuncionamento;
+            if (request.HoraAbertura < TimeSpan.Zero ||
+                request.HoraAbertura >= TimeSpan.FromDays(1) ||
+                request.HoraFechamento <= request.HoraAbertura ||
+                request.HoraFechamento >= TimeSpan.FromDays(1))
+            {
+                throw new Barberly.API.Exceptions.ValidationException("Os horários de funcionamento são inválidos.");
+            }
+
+            var horariofuncionamento = new HorarioFuncionamento
+            {
+                DiaSemana = request.DiaSemana,
+                HoraAbertura = request.HoraAbertura,
+                HoraFechamento = request.HoraFechamento,
+                IdBarbearia = request.IdBarbearia
+            };
+
+            await _geralRepo.Adicionar<HorarioFuncionamento>(horariofuncionamento);
+
+            return horariofuncionamento;
         }
 
         public async Task<HorarioFuncionamento> PegarHorarioAsync(int id)
@@ -31,31 +54,43 @@ namespace Barberly.API.Services
 
             if (horarioFuncionamento == null)
             {
-                throw new Exception("Horário de funcionamento não encontrado.");
+                throw new NotFoundException("Horário de funcionamento não encontrado.");
             }
 
             return horarioFuncionamento;
         }
 
-        public async Task<HorarioFuncionamento> AtualizarHorarioAsync(int id, HorarioFuncionamento horarioFuncionamento)
+        public async Task<HorarioFuncionamento> AtualizarHorarioAsync(int id, AtualizarHorarioRequest request)
         {
-            if (horarioFuncionamento == null)
+            if (request == null)
             {
-                throw new Exception("Horário de funcionamento não pode ser nulo.");
+                throw new Barberly.API.Exceptions.ValidationException("Horário de funcionamento não pode ser nulo.");
             }
 
             var horarioFuncionamentoAtt = await _geralRepo.PegarPorId<HorarioFuncionamento>(id);
 
-            if (horarioFuncionamento.IdBarbearia == null || horarioFuncionamento.HoraAbertura == null || horarioFuncionamento.HoraFechamento == null)
+            if (horarioFuncionamentoAtt == null)
             {
-                throw new Exception("Horário de funcionamento e Barbearia não encontrado.");
+                throw new NotFoundException("Horário de funcionamento não encontrado.");
             }
 
-            horarioFuncionamentoAtt.IdBarbearia = horarioFuncionamento.IdBarbearia;
-            horarioFuncionamentoAtt.HoraAbertura = horarioFuncionamento.HoraAbertura;
-            horarioFuncionamentoAtt.HoraFechamento = horarioFuncionamento.HoraFechamento;
-            horarioFuncionamentoAtt.DiaSemana = horarioFuncionamento.DiaSemana;
+            if (request.IdBarbearia <= 0)
+            {
+                throw new Barberly.API.Exceptions.ValidationException("O ID da barbearia deve ser válido.");
+            }
 
+            if (request.HoraAbertura < TimeSpan.Zero ||
+                request.HoraAbertura >= TimeSpan.FromDays(1) ||
+                request.HoraFechamento <= request.HoraAbertura ||
+                request.HoraFechamento >= TimeSpan.FromDays(1))
+            {
+                throw new Barberly.API.Exceptions.ValidationException("Os horários de funcionamento são inválidos.");
+            }
+
+            horarioFuncionamentoAtt.IdBarbearia = request.IdBarbearia;
+            horarioFuncionamentoAtt.HoraAbertura = request.HoraAbertura;
+            horarioFuncionamentoAtt.HoraFechamento = request.HoraFechamento;
+            horarioFuncionamentoAtt.DiaSemana = request.DiaSemana;
 
             await _geralRepo.Atualizar<HorarioFuncionamento>(horarioFuncionamentoAtt);
 
@@ -68,7 +103,7 @@ namespace Barberly.API.Services
 
             if (horarioFuncionamento == null)
             {
-                throw new Exception("Horário de funcionamento não encontrado.");
+                throw new NotFoundException("Horário de funcionamento não encontrado.");
             }
 
             await _geralRepo.Remover<HorarioFuncionamento>(horarioFuncionamento);

@@ -2,6 +2,7 @@
 using Barberly.API.Domain.DTOs.CategoriaServicoDTO;
 using Barberly.API.Domain.Models;
 using Barberly.API.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Org.BouncyCastle.Asn1.Ocsp;
@@ -18,6 +19,7 @@ namespace Barberly.API.Controllers
             _categoriaservicoService = categoriaservicoService;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<List<CategoriaServico>>> Get()
         {
@@ -25,6 +27,7 @@ namespace Barberly.API.Controllers
             return Ok(categoriaservicos);
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult<CategoriaServico>> Get(int id)
         {
@@ -33,30 +36,23 @@ namespace Barberly.API.Controllers
             return Ok(categoriaservico);
         }
 
+        [Authorize(Roles = "DonoBarbearia")]
         [HttpPost]
         public async Task<ActionResult<CategoriaServico>> Post(CriarCategoriaRequest request)
         {
-            CategoriaServico categoriaServico = new CategoriaServico
-            {
-                Nome = request.Nome,
-                Descricao = request.Descricao
-            };
-            await _categoriaservicoService.CriarCategoriaAsync(categoriaServico);
+            var categoriaServico = await _categoriaservicoService.CriarCategoriaAsync(request);
             return Ok(categoriaServico);
         }
 
+        [Authorize(Roles = "DonoBarbearia")]
         [HttpPut("{id}")]
         public async Task<ActionResult<CategoriaServico>> Put(int id, AtualizarCategoriaRequest request)
         {
-            CategoriaServico categoriaServico = new CategoriaServico
-            {
-                Nome = request.Nome,
-                Descricao = request.Descricao
-            };
-            await _categoriaservicoService.AtualizarCategoriaAsync(id,categoriaServico);
+            var categoriaServico = await _categoriaservicoService.AtualizarCategoriaAsync(id, request);
             return Ok(categoriaServico);
         }
 
+        [Authorize(Roles = "DonoBarbearia")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {

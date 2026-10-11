@@ -1,6 +1,7 @@
 ﻿using Barberly.API.Domain.DTOs.DonoBarbeariaDTO;
 using Barberly.API.Domain.Models;
 using Barberly.API.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Barberly.API.Controllers
@@ -11,11 +12,14 @@ namespace Barberly.API.Controllers
     {
         private readonly IDonoBarbeariaService _donobarbeariaService;
 
-        public DonoBarbeariaController(IDonoBarbeariaService donobarbeariaService)
+        public DonoBarbeariaController(
+            IDonoBarbeariaService donobarbeariaService)
         {
             _donobarbeariaService = donobarbeariaService;
         }
 
+        // Somente donos autenticados podem consultar donos.
+        [Authorize(Roles = "DonoBarbearia")]
         [HttpGet("{id}")]
         public async Task<ActionResult<DonoBarbearia>> Get(int id)
         {
@@ -24,44 +28,22 @@ namespace Barberly.API.Controllers
             return Ok(donobarbearia);
         }
 
-        [HttpPost]
-        public async Task<ActionResult<DonoBarbearia>> Post(CriarDonoBarbeariaRequest request)
-        {
-            DonoBarbearia donobarbearia = new DonoBarbearia
-            {
-                Nome = request.Nome,
-                Senha = request.Senha,
-                Email = request.Email,
-                Contato = request.Contato
-            };
-
-            await _donobarbeariaService.CriarDonoBarbeariaAsync(donobarbearia);
-
-            return Ok(donobarbearia);
-        }
-
+        // Somente donos autenticados podem atualizar dados.
+        [Authorize(Roles = "DonoBarbearia")]
         [HttpPut("{id}")]
         public async Task<ActionResult<DonoBarbearia>> Put(
             int id,
             AtualizarDonoBarbeariaRequest request)
         {
-            DonoBarbearia donobarbearia = new DonoBarbearia
-            {
-                Nome = request.Nome,
-                Senha = request.Senha,
-                Email = request.Email,
-                Contato = request.Contato
-            };
-
-            await _donobarbeariaService.AtualizarDonoBarbeariaAsync(
-                id,
-                donobarbearia);
+            var donobarbearia = await _donobarbeariaService.AtualizarDonoBarbeariaAsync(id, request);
 
             return Ok(donobarbearia);
         }
 
+        // Somente donos autenticados podem excluir contas.
+        [Authorize(Roles = "DonoBarbearia")]
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             return Ok(
                 await _donobarbeariaService.DeletarDonoBarbeariaAsync(id)

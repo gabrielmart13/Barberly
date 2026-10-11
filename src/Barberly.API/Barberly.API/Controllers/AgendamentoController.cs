@@ -1,9 +1,8 @@
-﻿using Barberly.API.Data;
-using Barberly.API.Domain.DTOs.AgendamentoDTO;
+﻿using Barberly.API.Domain.DTOs.AgendamentoDTO;
 using Barberly.API.Domain.Models;
 using Barberly.API.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Barberly.API.Controllers
 {
@@ -12,11 +11,13 @@ namespace Barberly.API.Controllers
     public class AgendamentoController : ControllerBase
     {
         private readonly IAgendamentoService _agendamentoService;
+
         public AgendamentoController(IAgendamentoService agendamentoService)
         {
             _agendamentoService = agendamentoService;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<List<Agendamento>>> Get()
         {
@@ -24,29 +25,23 @@ namespace Barberly.API.Controllers
             return Ok(agendamentos);
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult<Agendamento>> Get(int id)
         {
             var agendamento = await _agendamentoService.PegarAgendamentoAsync(id);
-
             return Ok(agendamento);
         }
 
+        [Authorize(Roles = "Usuario")]
         [HttpPost]
         public async Task<ActionResult<Agendamento>> Post(CriarAgendamentoRequest request)
         {
-            Agendamento agendamento = new Agendamento
-            {
-                DataHora = request.DataHora,
-                IdUsuario = request.IdUsuario,
-                IdBarbearia = request.IdBarbearia,
-                IdBarbeiro = request.IdBarbeiro,
-                IdServico = request.IdServico
-            };
-            await _agendamentoService.CriarAgendamentoAsync(agendamento);
+            var agendamento = await _agendamentoService.CriarAgendamentoAsync(request);
             return Ok(agendamento);
         }
 
+        [Authorize(Roles = "Usuario, DonoBarbearia")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

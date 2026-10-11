@@ -7,7 +7,7 @@ namespace Barberly.API.Domain.Models
     {
         [Key]
         public int IdServico { get; set; }
-        public string Nome { get; set; }
+        public string Nome { get; set; } = string.Empty;
         public decimal Valor { get; set; }
         public int TempoEstimado { get; set; }
         public int IdCategoria { get; set; }

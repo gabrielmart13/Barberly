@@ -1,4 +1,5 @@
-﻿using Barberly.API.Domain.Models;
+﻿using Barberly.API.Domain.DTOs.HorarioFuncionamentoDTO;
+using Barberly.API.Domain.Models;
 
 namespace Barberly.API.Services.Interfaces
 {
@@ -6,8 +7,8 @@ namespace Barberly.API.Services.Interfaces
     {
         public Task<List<HorarioFuncionamento>> PegarTodosHorariosAsync();
         public Task<HorarioFuncionamento> PegarHorarioAsync(int id);
-        public Task<HorarioFuncionamento> CriarHorarioAsync(HorarioFuncionamento horario);
-        public Task<HorarioFuncionamento> AtualizarHorarioAsync(int id, HorarioFuncionamento horario);
+        public Task<HorarioFuncionamento> CriarHorarioAsync(CriarHorarioRequest request);
+        public Task<HorarioFuncionamento> AtualizarHorarioAsync(int id, AtualizarHorarioRequest request);
         public Task<HorarioFuncionamento> DeletarHorarioAsync(int id);
 
     }

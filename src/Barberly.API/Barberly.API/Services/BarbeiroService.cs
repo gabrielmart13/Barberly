@@ -1,5 +1,7 @@
 ﻿using Barberly.API.Data.Repositories.Interfaces;
+using Barberly.API.Domain.DTOs.BarbeiroDTO;
 using Barberly.API.Domain.Models;
+using Barberly.API.Exceptions;
 using Barberly.API.Services.Interfaces;
 
 namespace Barberly.API.Services
@@ -11,12 +13,24 @@ namespace Barberly.API.Services
         {
             _geralRepo = geralRepo;
         }
-        public async Task<Barbeiro> CriarBarbeiroAsync(Barbeiro barbeiro)
+        public async Task<Barbeiro> CriarBarbeiroAsync(CriarBarbeiroRequest request)
         {
-            if (string.IsNullOrWhiteSpace(barbeiro.Nome) || string.IsNullOrWhiteSpace(barbeiro.Email) || string.IsNullOrWhiteSpace(barbeiro.Contato) || barbeiro.IdBarbearia == null)
+            if(request == null)
             {
-                throw new Exception("Nome, Email, Contato e IdBarbearia são obrigatórios.");
+                throw new Barberly.API.Exceptions.ValidationException("O barbeiro e nulo");
             }
+            if (string.IsNullOrWhiteSpace(request.Nome) || string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Contato) || request.IdBarbearia <= 0)
+            {
+                throw new Barberly.API.Exceptions.ValidationException("Nome, Email, Contato e IdBarbearia são obrigatórios.");
+            }
+            var barbeiro = new Barbeiro
+            {
+                Nome = request.Nome,
+                Email = request.Email,
+                Contato = request.Contato,
+                Experiencia = request.Experiencia,
+                IdBarbearia = request.IdBarbearia
+            };
             await _geralRepo.Adicionar<Barbeiro>(barbeiro);
             return barbeiro;
         }
@@ -25,7 +39,7 @@ namespace Barberly.API.Services
             var barbeiro = await _geralRepo.PegarPorId<Barbeiro>(id);
             if (barbeiro == null)
             {
-                throw new Exception($"Barbeiro não encontrado.");
+                throw new NotFoundException($"Barbeiro não encontrado.");
             }
             return barbeiro;
         }
@@ -34,23 +48,28 @@ namespace Barberly.API.Services
             var barbeiros = await _geralRepo.PegarTodos<Barbeiro>();
             return barbeiros.ToList();
         }
-        public async Task<Barbeiro> AtualizarBarbeiroAsync(int id, Barbeiro barbeiro)
+        public async Task<Barbeiro> AtualizarBarbeiroAsync(int id, AtualizarBarbeiroRequest request)
         {
-            if(barbeiro == null)
+            if(request == null)
             {
-                throw new Exception("Barbeiro não pode ser nulo.");
+                throw new Barberly.API.Exceptions.ValidationException("Barbeiro não pode ser nulo.");
             }
             var barbeiroAtt = await _geralRepo.PegarPorId<Barbeiro>(id);
-
-            if (string.IsNullOrWhiteSpace(barbeiro.Nome) || string.IsNullOrWhiteSpace(barbeiro.Email) || string.IsNullOrWhiteSpace(barbeiro.Contato) || barbeiro.IdBarbearia == null)
+            if(barbeiroAtt == null)
             {
-                throw new Exception("Nome, Email, Contato e IdBarbearia são obrigatórios.");
+                throw new Barberly.API.Exceptions.ValidationException("Barbeiro não encontrado.");
             }
+            if (string.IsNullOrWhiteSpace(request.Nome) || string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Contato) || request.IdBarbearia <= 0)
+            {
+                throw new Barberly.API.Exceptions.ValidationException("Nome, Email, Contato e IdBarbearia são obrigatórios.");
+            }
+
             // Atualiza os campos do barbeiro existente com os valores do novo barbeiro
-            barbeiroAtt.Nome = barbeiro.Nome;
-            barbeiroAtt.Email = barbeiro.Email;
-            barbeiroAtt.Contato = barbeiro.Contato;
-            barbeiroAtt.IdBarbearia = barbeiro.IdBarbearia;
+            barbeiroAtt.Nome = request.Nome;
+            barbeiroAtt.Email = request.Email;
+            barbeiroAtt.Contato = request.Contato;
+            barbeiroAtt.IdBarbearia = request.IdBarbearia;
+
             await _geralRepo.Atualizar<Barbeiro>(barbeiroAtt);
             return barbeiroAtt;
         }
@@ -59,7 +78,7 @@ namespace Barberly.API.Services
             var barbeiro = await _geralRepo.PegarPorId<Barbeiro>(id);
             if (barbeiro == null)
             {
-                throw new Exception($"Barbeiro não encontrado.");
+                throw new NotFoundException($"Barbeiro não encontrado.");
             }
             await _geralRepo.Remover<Barbeiro>(barbeiro);
             return barbeiro;

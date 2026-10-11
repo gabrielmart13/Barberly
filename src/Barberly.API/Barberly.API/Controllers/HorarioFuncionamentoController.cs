@@ -1,6 +1,7 @@
 ﻿using Barberly.API.Domain.DTOs.HorarioFuncionamentoDTO;
 using Barberly.API.Domain.Models;
 using Barberly.API.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Barberly.API.Controllers
@@ -17,6 +18,7 @@ namespace Barberly.API.Controllers
             _horariofuncionamentoService = horariofuncionamentoService;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<List<HorarioFuncionamento>>> Get()
         {
@@ -26,6 +28,7 @@ namespace Barberly.API.Controllers
             return Ok(horariosfuncionamento);
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult<HorarioFuncionamento>> Get(int id)
         {
@@ -35,44 +38,26 @@ namespace Barberly.API.Controllers
             return Ok(horariofuncionamento);
         }
 
+        [Authorize(Roles = "DonoBarbearia")]
         [HttpPost]
-        public async Task<ActionResult<HorarioFuncionamento>> Post(
-            CriarHorarioRequest request)
-        {
-            HorarioFuncionamento horariofuncionamento = new HorarioFuncionamento
-            {
-                HoraAbertura = request.HoraAbertura,
-                HoraFechamento = request.HoraFechamento,
-                DiaSemana = request.DiaSemana,
-                IdBarbearia = request.IdBarbearia
-            };
-
-            await _horariofuncionamentoService.CriarHorarioAsync(
-                horariofuncionamento);
-
+        public async Task<ActionResult<HorarioFuncionamento>> Post(CriarHorarioRequest request)
+        {    
+            var horariofuncionamento = await _horariofuncionamentoService.CriarHorarioAsync(request);
+            
             return Ok(horariofuncionamento);
         }
 
+        [Authorize(Roles = "DonoBarbearia")]
         [HttpPut("{id}")]
-        public async Task<ActionResult<HorarioFuncionamento>> Put(
-            int id,
-            AtualizarHorarioRequest request)
+        public async Task<ActionResult<HorarioFuncionamento>> Put(int id,AtualizarHorarioRequest request)
         {
-            HorarioFuncionamento horariofuncionamento = new HorarioFuncionamento
-            {
-                HoraAbertura = request.HoraAbertura,
-                HoraFechamento = request.HoraFechamento,
-                DiaSemana = request.DiaSemana,
-                IdBarbearia = request.IdBarbearia
-            };
 
-            await _horariofuncionamentoService.AtualizarHorarioAsync(
-                id,
-                horariofuncionamento);
+            var horariofuncionamento = await _horariofuncionamentoService.AtualizarHorarioAsync(id, request);
 
             return Ok(horariofuncionamento);
         }
 
+        [Authorize(Roles = "DonoBarbearia")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {

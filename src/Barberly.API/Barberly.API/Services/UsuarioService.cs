@@ -1,5 +1,7 @@
 ﻿using Barberly.API.Data.Repositories.Interfaces;
+using Barberly.API.Domain.DTOs.UsuarioDTO;
 using Barberly.API.Domain.Models;
+using Barberly.API.Exceptions;
 using Barberly.API.Services.Interfaces;
 
 namespace Barberly.API.Services
@@ -7,67 +9,69 @@ namespace Barberly.API.Services
     public class UsuarioService : IUsuarioService
     {
         private readonly IGeralRepo _geralRepo;
+
         public UsuarioService(IGeralRepo geralRepo)
         {
             _geralRepo = geralRepo;
         }
 
-        public async Task<Usuario> AtualizarUsuarioAsync(int id, Usuario usuario)
+        // Busca um usuário pelo ID e atualiza seus dados.
+        public async Task<Usuario> AtualizarUsuarioAsync(int id,AtualizarUsuarioRequest request)
         {
-            if(usuario == null)
-            {
-                throw new Exception("O usuário não pode ser nulo.");
-            }
-            var usuarioAtt = await _geralRepo.PegarPorId<Usuario>(id);
+            var usuario = await _geralRepo.PegarPorId<Usuario>(id);
 
-            if (string.IsNullOrEmpty(usuario.Nome) || string.IsNullOrEmpty(usuario.Email) || string.IsNullOrEmpty(usuario.Senha))
+            if (usuario == null)
             {
-                throw new Exception("Nome, Email e Senha são obrigatórios.");
+                throw new NotFoundException("Usuário não encontrado.");
             }
 
-            usuarioAtt.Nome = usuario.Nome;
-            usuarioAtt.Email = usuario.Email;
-            usuarioAtt.Senha = usuario.Senha;
-            usuarioAtt.Contato = usuario.Contato;
-
-            await _geralRepo.Atualizar<Usuario>(usuarioAtt);
-            return usuarioAtt;
-        }
-
-        public async Task<Usuario> CriarUsuarioAsync(Usuario usuario)
-        {
-            if(string.IsNullOrEmpty(usuario.Nome) || string.IsNullOrEmpty(usuario.Email) || string.IsNullOrEmpty(usuario.Senha))
+            if (request == null)
             {
-                throw new Exception("Nome, Email e Senha são obrigatórios.");
+                throw new ValidationException("Os dados de atualização são obrigatórios.");
             }
-            await _geralRepo.Adicionar<Usuario>(usuario);
+
+            usuario.Nome = request.Nome;
+            usuario.Email = request.Email;
+            usuario.Contato = request.Contato;
+
+            await _geralRepo.Atualizar<Usuario>(usuario);
+
             return usuario;
         }
 
+        // Exclui um usuário pelo ID.
         public async Task<Usuario> DeletarUsuarioAsync(int id)
         {
             var usuario = await _geralRepo.PegarPorId<Usuario>(id);
-            if(usuario == null)
+
+            if (usuario == null)
             {
-                throw new Exception("Usuário não encontrado.");
+                throw new NotFoundException("Usuário não encontrado.");
             }
+
             await _geralRepo.Remover<Usuario>(usuario);
+
             return usuario;
         }
 
+        // Retorna todos os usuários.
         public async Task<List<Usuario>> PegarTodosUsuariosAsync()
         {
             var usuarios = await _geralRepo.PegarTodos<Usuario>();
+
             return usuarios.ToList();
         }
 
+        // Busca um usuário pelo ID.
         public async Task<Usuario> PegarUsuarioAsync(int id)
         {
             var usuario = await _geralRepo.PegarPorId<Usuario>(id);
+
             if (usuario == null)
             {
-                throw new Exception("Usuário não encontrado.");
+                throw new NotFoundException("Usuário não encontrado.");
             }
+
             return usuario;
         }
     }
